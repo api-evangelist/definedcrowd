@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/definedcrowd-openapi-original.json
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: Bearer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: Please enter into field the word 'Bearer' following by space and JWT
+  sources:
+  - openapi/definedcrowd-openapi-original.json
