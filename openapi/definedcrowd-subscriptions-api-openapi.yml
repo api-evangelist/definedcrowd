@@ -1,0 +1,216 @@
+openapi: 3.0.1
+info:
+  title: Defined.ai Deliverables Subscriptions API
+  description: "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n"
+  version: v2
+  x-logo:
+    url: https://definedcrowd.azureedge.net/content/images/dai-logo-black.svg
+    backgroundColor: '#FFFFFF'
+    href: https://defined.ai/
+security:
+- Bearer: []
+tags:
+- name: Subscriptions
+  description: "Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project.\n\n <small> By using this service, the user fully agrees with Defined.ai's service <a href=\"https://www.defined.ai/terms-of-use/\">Terms of Use</a>, and acknowledges and understands that any processing of personal data will be carried out according to the terms of Defined.ai's <a href=\"https://www.defined.ai/privacy-policy/\">Privacy Policy</a>. The user further acknowledges that it is fully responsible for obtaining and managing all necessary valid consents from all data subjects whose email address is being subscribed by the user, for the sole purposes of receiving service notifications in context of Defined.ai provided services, in compliance with all applicable data protection laws, including the EU General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA). The user also acknowledges that it is fully responsible for unsubscribing such emails once no longer necessary for these purposes or in case the data subject has removed its consent.\n\n Defined.ai reserves the right to proceed with the immediate service suspension without any prior notice, if it detects service abuse, non-compliance with the above obligations or in case it receives complaints from data subjects that have not provided their consent for the subscription of their email. </small>"
+paths:
+  /v2.0/public/projects/{projectId}/subscriptions:
+    put:
+      tags:
+      - Subscriptions
+      summary: Put Subscriptions
+      description: "Subscribe or edit the list of email addresses that receive the notifications.\r\nCurrently, the following types of events are available for subscription:\r\n            \r\n**Data Upload Completed:** Receive a notification when an upload of data for the project\r\nis completed, including information if any errors were found. The email is only sent after\r\nthe asynchronous part of the upload is finished. Note that you will receive an email per each\r\ninput unit set uploaded. You can know more\r\nin <a href=\"#tag/Input-Units\">data upload section</a>.\r\n            \r\n**Deliverable Published:** Receive a notification when a new result file for the project is available to\r\ndownload. You can know more in the\r\n<a href=\"#tag/Deliverables\">deliverables section</a>.\r\n            \r\n**Permissions:** Update Project Properties"
+      operationId: Subscriptions_SubmitSubscriptions
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      requestBody:
+        description: Subscriptions.
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel'
+      responses:
+        '202':
+          description: Accepted. Subscription will be configured asynchronously.
+        '400':
+          description: Invalid parameters.
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '403':
+          description: Email consent is missing (or invalid), subscription can’t be done without email consent.
+        '404':
+          description: Project does not exist.
+    get:
+      tags:
+      - Subscriptions
+      summary: Get Subscriptions
+      description: "Retrieves a list of subscribed notifications within a specific project.\r\n            \r\n**Permissions:** Read Project Properties"
+      operationId: Subscriptions_GetSubscriptions
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: OK. Returns a list with project subscriptions.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults'
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Project does not exist.
+  /v2.0/public/projects/{projectId}/subscriptions/{type}:
+    delete:
+      tags:
+      - Subscriptions
+      summary: Delete Subscription
+      description: "Allows to unsubscribe each of the existing notifications. \r\n             \r\n**Permissions**: Update Project Properties"
+      operationId: Subscriptions_DeleteSubscription
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      - name: type
+        in: path
+        description: 'Type of notifications. Valid values: "DeliverablePublished" and "DataUploadCompleted".'
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted. Subscription will be deleted asynchronously.
+        '400':
+          description: Invalid parameters.
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Project does not exist / Subscription type is not configured.
+components:
+  schemas:
+    DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel:
+      title: JSON object
+      required:
+      - emailListConsent
+      - to
+      - type
+      type: object
+      properties:
+        type:
+          minLength: 1
+          type: string
+          description: 'Type of notifications. Valid values: "DeliverablePublished" and "DataUploadCompleted".'
+        to:
+          type: array
+          items:
+            type: string
+          description: List of main recipients of the email addresses [1-10].
+        emailListConsent:
+          type: boolean
+          description: "By setting this flag to True the user acknowledges that it has obtained all necessary valid consents from\r\nthe relevant data subjects (email owners) to subscribe, on their behalf, each respective email address to\r\nthis notification service, in compliance with the applicable data protection laws, and in agreement with\r\nDefined.ai's service <a href=\"https://www.defined.ai/terms-of-use\">Terms of Use</a>\r\nand <a href=\"https://www.defined.ai/privacy-policy\">Privacy Policy</a>."
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults:
+      title: JSON object
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult'
+          description: List of subscriptions.
+          nullable: true
+        totalCount:
+          type: integer
+          description: Total number of items available.
+          format: int32
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult:
+      title: JSON object
+      type: object
+      properties:
+        type:
+          enum:
+          - DeliverablePublished
+          - DataUploadCompleted
+          type: string
+          description: Type of notifications.
+          x-enumNames:
+          - DeliverablePublished
+          - DataUploadCompleted
+          x-enumDescriptions:
+          - ''
+          - ''
+          x-ms-enum:
+            name: NotificationType
+            modelAsString: true
+        to:
+          type: array
+          items:
+            type: string
+          description: List of main recipients of the email addresses [1-10]
+          nullable: true
+        emailListConsent:
+          type: boolean
+          description: "When this flag is True the user acknowledges that it has obtained all necessary valid consents\r\nfrom the relevant data subjects (email owners) to subscribe, on their behalf, each respective email address\r\nto this notification service, in compliance with the applicable data protection laws, and in agreement with\r\nDefined.ai's service <a href=\"https://www.defined.ai/terms-of-use\">Terms of Use</a>\r\nand <a href=\"https://www.defined.ai/privacy-policy\">Privacy Policy</a>."
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter into field the word 'Bearer' following by space and JWT
+      name: Authorization
+      in: header
+x-tagGroups:
+- name: ' '
+  tags:
+  - Supported Languages
+- name: Project life cycle
+  tags:
+  - Project Management
+  - Subscriptions
+  - Jobs
+  - Input Units
+  - Deliverables
+- name: Speech Technologies
+  tags:
+  - Mean Opinion Score
+  - Pronunciation Validation

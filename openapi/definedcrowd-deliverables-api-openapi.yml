@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  title: Defined.ai Deliverables API
+  description: "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n"
+  version: v2
+  x-logo:
+    url: https://definedcrowd.azureedge.net/content/images/dai-logo-black.svg
+    backgroundColor: '#FFFFFF'
+    href: https://defined.ai/
+security:
+- Bearer: []
+tags:
+- name: Deliverables
+  description: The result file is created after the project is completed and is referred to as deliverables. The file contains contributor metadata for completed input units.
+paths:
+  /v2.0/public/projects/{projectId}/deliverables:
+    get:
+      tags:
+      - Deliverables
+      summary: Get Deliverables
+      description: "The function retrieves details, including metadata and the ID, for all available files\r\nof the given project ID.  \r\n            \r\n**Permission Required:** Read Project Properties"
+      operationId: ProjectsDeliverables_GetDeliverables
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      - name: sortBy
+        in: query
+        description: "Type of filter. Valid values: \"createdTimestamp\", \"isPartial\", \"downloadCount\", \"fileName\", \"type\".\r\nPlease note that, it is only possible to use one filter at a time."
+        schema:
+          type: string
+          default: createdTimestamp
+      - name: sortDirection
+        in: query
+        description: 'Order of displayed results. Valid values: "asc", "desc".'
+        schema:
+          type: string
+          default: desc
+      - name: pageNumber
+        in: query
+        description: The page to retrieve.
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: itemsPerPage
+        in: query
+        description: The number of items to retrieve per page. The maximum number of items per page allowed is 100.
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: type
+        in: query
+        description: The project deliverable type.
+        schema:
+          enum:
+          - Classic
+          - Aggregated
+          - Flat
+          - CrowdMetadata
+          type: string
+        x-enumNames:
+        - Classic
+        - Aggregated
+        - Flat
+        - CrowdMetadata
+        x-enumDescriptions:
+        - ''
+        - ''
+        - ''
+        - ''
+      - name: isPartial
+        in: query
+        description: Indication of whether the file contains partial result set or complete result set.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables'
+        '400':
+          description: Invalid parameters.
+        '401':
+          description: Invalid Authentication (invalid/expired token).
+        '404':
+          description: Project does not exist.
+  /v2.0/public/projects/{projectId}/deliverables/{deliverableId}:
+    get:
+      tags:
+      - Deliverables
+      summary: Get Deliverable Details
+      description: "Retrieves a deliverable file with details on what will be provided for each project. \r\n            \r\n**Permission Required:** Read Project Properties"
+      operationId: ProjectsDeliverables_GetDeliverablesDetails
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      - name: deliverableId
+        in: path
+        description: Deliverable ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: Success.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable'
+        '401':
+          description: Invalid Authentication (invalid/expired token).
+        '404':
+          description: Project or deliverable does not exist.
+  /v2.0/public/projects/{projectId}/deliverables/{deliverableId}/download:
+    get:
+      tags:
+      - Deliverables
+      summary: Get Deliverable Download
+      description: "Download the project deliverable file.\r\n            \r\n**Permission Required:** Read Project Properties"
+      operationId: ProjectsDeliverables_GetDeliverablesDownload
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      - name: deliverableId
+        in: path
+        description: Deliverable ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: Success. The file is returned.
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Project or deliverable does not exist.
+components:
+  schemas:
+    DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables:
+      title: JSON object
+      type: object
+      properties:
+        deliverables:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable'
+          description: List of deliverables
+          nullable: true
+        totalCount:
+          type: integer
+          description: Total number of items available.
+          format: int32
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable:
+      title: JSON object
+      type: object
+      properties:
+        projectId:
+          type: string
+          description: Project ID.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        deliverableId:
+          type: string
+          description: Deliverable ID within a project.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        type:
+          type: string
+          description: "\n**Classic**</br> is a standard JSON format generated by our API.  \r\n            \n**Aggregated**</br> is a format that combines results for all responses at the task level.\r\n            \n**Flat**</br> is a result file at the response level.  \r\n            \n**CrowdMetadata**</br> contains information about the contributors that are relevant to their results."
+          nullable: true
+        fileName:
+          type: string
+          description: Name of the result file.
+          nullable: true
+        createdTimestamp:
+          type: string
+          description: Date and timestamp of when the file was created.
+          format: date-time
+        isPartial:
+          type: boolean
+          description: Indication of whether the file contains partial result set or complete result set.
+        downloadCount:
+          type: integer
+          description: Number of times file was downloaded.
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter into field the word 'Bearer' following by space and JWT
+      name: Authorization
+      in: header
+x-tagGroups:
+- name: ' '
+  tags:
+  - Supported Languages
+- name: Project life cycle
+  tags:
+  - Project Management
+  - Subscriptions
+  - Jobs
+  - Input Units
+  - Deliverables
+- name: Speech Technologies
+  tags:
+  - Mean Opinion Score
+  - Pronunciation Validation

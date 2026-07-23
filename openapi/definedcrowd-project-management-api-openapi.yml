@@ -1,0 +1,581 @@
+openapi: 3.0.1
+info:
+  title: Defined.ai Deliverables Project Management API
+  description: "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n"
+  version: v2
+  x-logo:
+    url: https://definedcrowd.azureedge.net/content/images/dai-logo-black.svg
+    backgroundColor: '#FFFFFF'
+    href: https://defined.ai/
+security:
+- Bearer: []
+tags:
+- name: Project Management
+  description: 'Informally, projects can be viewed as configurable packages that process sets of Input Units. The project’s template determines how the Input Units are processed. Projects can be retrieved and managed as needed through the following methods:'
+paths:
+  /v2.0/public/projects/{sourceProjectId}/clone:
+    post:
+      tags:
+      - Project Management
+      summary: Clone Project
+      description: "Cloning a project creates a copy of the setup configuration and other elements.\r\nA new project with the same configuration, properties and jobs as the source project is created.  \r\n\r\n**Permission Required:** Create Project"
+      operationId: Projects_CloneProject
+      parameters:
+      - name: sourceProjectId
+        in: path
+        description: Source Project ID. The project is copied from this ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel'
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel'
+        required: true
+      responses:
+        '202':
+          description: Accepted. Project will be cloned asynchronously.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult'
+        '400':
+          description: Invalid parameters.
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Source project does not exist.
+  /v2.0/public/projects:
+    get:
+      tags:
+      - Project Management
+      summary: Get Projects
+      description: "Retrieves a comprehensive list of projects and the respective information about those projects associated\r\nwith an Enterprise account. This includes Projects created through the REST API and the Enterprise Portal.\r\n            \r\n**Permission Required:** List Projects"
+      operationId: Projects_GetProjects
+      parameters:
+      - name: pageNumber
+        in: query
+        description: The page to retrieve.
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: itemsPerPage
+        in: query
+        description: The number of items to retrieve per page. The maximum number of items per page allowed is 100.
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Returns a List with project Information.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults'
+        '400':
+          description: Invalid page number or items per page count
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '403':
+          description: Invalid Enterprise Subscription.
+  /v2.0/public/projects/{projectId}:
+    get:
+      tags:
+      - Project Management
+      summary: Get Project Details
+      description: "Retrieves the information associated with a Project.\r\n            \r\n**Permission Required:** Read Project Properties"
+      operationId: Projects_GetProjectDetails
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: Returns project details.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult'
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Project does not exist.
+    put:
+      tags:
+      - Project Management
+      summary: Edit Project
+      description: "Allows you to edit project settings such as name and desired delivery date, after creation or cloning.\r\nThe editing function stops once the first upload of input units begin and the NOT ACTIVE project state\r\nis changed.\r\n            \r\nNote: both fields must be provided to update either one of them. \r\n\r\n**Permission Required:** Update Project Properties"
+      operationId: Projects_EditProject
+      parameters:
+      - name: projectId
+        in: path
+        description: Project ID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel'
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel'
+        required: true
+      responses:
+        '202':
+          description: Accepted. Project is updated asynchronously. No response body.
+        '400':
+          description: Invalid parameters.
+        '401':
+          description: Invalid authentication (invalid/expired token).
+        '404':
+          description: Project does not exist.
+  /v2.0/public/projects/{projectId}/status:
+    get:
+      tags:
+      - Project Management
+      summary: Get Project Status
+      description: "When invoked, Get Project Status returns current project status and — if input data errors\r\nwere detected — error information associated with each input data unit where an error occurred.\r\n            \r\nA project’s state can change due to REST API calls executed by your code, changes made to a project in\r\nthe Enterprise Portal as well as project-related events occurring at Defined.ai.\r\nIt is not guaranteed that project states follow a sequential, ordered progression. \r\n             \r\n| REST API Call Invocation | Project Related Event | Project Status | Invokable REST API Calls |\r\n|:-------------|:-------------|:-------------|:-------------|\r\n| Create Project | Project has been created | NOT ACTIVE | Upload Data Units \n Delete Project |\r\n| Upload Data Units | Defined.ai is running validation | PROCESSING DATA UPLOAD | |\r\n| | Upload to Defined.ai is complete and no errors were detected | UPLOAD SUCCESS | Upload Data Units \n Delete Project |\r\n| | Upload to Defined.ai is complete but Defined.ai found errors in some Input Units | UPLOAD ERRORS | Upload Data Units \n Delete Project |\r\n| | Upload to Defined.ai is complete but no data unit is valid | INSUFFICIENT DATA | Upload Data Units \n Delete Project |\r\n| | Defined.ai is preparing the project before deploying it to our human intelligence community | PREPARING PROJECT | Cancel Project |\r\n| | Defined.ai has deployed the project to our human intelligence community | RUNNING | Cancel Project |\r\n| | Defined.ai is accessing the quality of the human intelligence community | ASSESSING QUALITY | Cancel Project |\r\n| | Defined.ai is curating and preparing the results for download | GENERATING RESULTS | |\r\n| | Defined.ai has completed the project and data is available for download  | PROJECT COMPLETED | Delete Project \n Get Deliverables |\r\n| Cancel Project | Defined.ai has canceled the project | CANCELLED | Delete Project |\r\n| Delete Project | Defined.ai has deleted the project | DELETED | |\r\n\n\r\n             \r\n**Permission Required:** Read Project Properties"
+      operationId: Projects_GetProjectStatus
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: The ProjectStatus structure.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults'
+        '401':
+          description: Invalid authentication (project from another enterprise or invalid/expired token).
+        '404':
+          description: Project does not exist.
+  /v2.0/public/projects/{projectId}/cancel:
+    put:
+      tags:
+      - Project Management
+      summary: Cancel Project
+      description: "Cancels a Project that has been Started. When Cancel is invoked, Defined.ai reviews the progress of the\r\nProject being canceled. If a portion of the Project has been completed, the Enterprise customer is charged\r\nfor that portion, and refunded with the credits for the remainder of the uncompleted work.\r\n            \r\n**Permission Required:** Update Project Properties"
+      operationId: Projects_CancelProject
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: Project cancelled.
+        '400':
+          description: Project status cannot be switched.
+        '401':
+          description: Invalid authentication (project from another enterprise or invalid/expired token).
+        '403':
+          description: Invalid Enterprise Subscription.
+        '404':
+          description: Project does not exist.
+  /v2.0/public/projects/{projectId}/delete:
+    delete:
+      tags:
+      - Project Management
+      summary: Delete Project
+      description: "Deletes a Project.  When a Project is deleted, it is no longer available. As a result, if the Project has\r\nbeen completed and there exists project results, we recommend that project results are retrieved prior to\r\ndeletion.\r\n            \r\nQuick tip: Projects can be deleted if they haven't been started, if they were completed, paused or cancelled. \r\n            \r\n**Permission Required:** Delete Project"
+      operationId: Projects_DeleteProject
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: Project deleted.
+        '400':
+          description: Project status cannot be switched.
+        '401':
+          description: Invalid authentication (project from another enterprise or invalid/expired token).
+        '403':
+          description: Invalid Enterprise Subscription.
+        '404':
+          description: Project does not exist.
+components:
+  schemas:
+    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        projectDetails:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails'
+          description: Details from a specific project.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel:
+      title: JSON object
+      required:
+      - projectName
+      type: object
+      properties:
+        projectName:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: New project name.
+        desiredDeliveryDate:
+          type: string
+          description: "Desired delivery date for new project in UTC format <yyyy-mm-dd>. \r\nIf left as null, no desired delivery date is assigned."
+          format: date
+          nullable: true
+        targetProjectId:
+          type: string
+          description: New project ID. If left as null, GUID is auto-generated and returned in the response.
+          format: uuid
+          nullable: true
+          example: 00000000-0000-0000-0000-000000000000
+        metatags:
+          title: JSON object
+          type: object
+          additionalProperties:
+            nullable: true
+          description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n     { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }"
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError:
+      title: JSON object
+      type: object
+      properties:
+        inputDataUnitId:
+          type: string
+          description: Unique identifier of the input data unit where the error occurred.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        errorType:
+          enum:
+          - connectionUnsuccessful
+          - fileDoesNotExist
+          - fileIsNotValid
+          - unauthorizedAccess
+          - statusCodeDoesNotIndicateSuccess
+          - platformError
+          - urlNotSupported
+          type: string
+          description: Type of error.
+          x-enumNames:
+          - ConnectionUnsuccessful
+          - FileDoesNotExist
+          - FileIsNotValid
+          - UnauthorizedAccess
+          - StatusCodeDoesNotIndicateSuccess
+          - PlatformError
+          - UrlNotSupported
+          x-enumDescriptions:
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          x-ms-enum:
+            name: FileUploadErrorMessage
+            modelAsString: true
+        errorDetails:
+          type: string
+          description: Details of error.
+          nullable: true
+        errorProperty:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty'
+          nullable: true
+        inputDataUnit:
+          description: Fields of the original uploaded input unit.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel:
+      title: JSON object
+      required:
+      - desiredDeliveryDate
+      - metatags
+      - projectName
+      type: object
+      properties:
+        projectName:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: Name of project.
+        desiredDeliveryDate:
+          type: string
+          description: Desired date of delivery for project in UTC format <yyyy-mm-dd>. If left as null, no desired delivery date is assigned.
+          format: date
+          nullable: true
+        metatags:
+          title: JSON object
+          type: object
+          additionalProperties:
+            nullable: true
+          description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n     { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }"
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo'
+          description: A page with details from several projects.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult:
+      title: JSON object
+      type: object
+      properties:
+        targetProjectId:
+          type: string
+          description: New project ID
+          format: uuid
+          readOnly: true
+          example: 00000000-0000-0000-0000-000000000000
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails:
+      title: JSON object
+      type: object
+      properties:
+        id:
+          type: string
+          description: Project Identifier.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Name of the project.
+          nullable: true
+        projectType:
+          type: string
+          description: Code that identifies a project template type
+          nullable: true
+        status:
+          type: string
+          description: The project's current status.
+          nullable: true
+        dateTimeCreated:
+          type: string
+          description: Date and time when the project was created.
+          format: date-time
+        dateTimeLastRun:
+          type: string
+          description: Date and time when the project last ran.
+          format: date-time
+          nullable: true
+        progress:
+          type: integer
+          description: "Reflects the progress of execution of a specific project.\r\n            \r\nThis value is subject to changes. The progress might decrease as the latest collected data is still subject to quality validations."
+          format: int32
+        estimatedDateToComplete:
+          type: string
+          description: "A projection of the project completion date.\r\n            \r\nThis is not a committed date. The date is a projection based on the average speed at which data is collected and may vary."
+          format: date-time
+          nullable: true
+        totalNumberInputUnitsSubmitted:
+          type: integer
+          description: Total number of input units submitted for the project.
+          format: int32
+        totalNumberOutputUnitsCompleted:
+          type: integer
+          description: Number of data units already completed.
+          format: int32
+        targetNumberOutputDataUnits:
+          type: integer
+          description: Number of target data units.
+          format: int32
+        uploadInputUnitsError:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError'
+          description: List of errors in the data unit uploading asynchronous process.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult:
+      title: JSON object
+      type: object
+      properties:
+        projectId:
+          type: string
+          description: Project ID.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        projectName:
+          type: string
+          description: Name of the project.
+          nullable: true
+        dateTimeCreated:
+          type: string
+          description: Date and time when the project was created in UTC format.
+          format: date-time
+        desiredDeliveryDate:
+          type: string
+          description: Desired delivery date and time for new project in UTC format.
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          description: The project's current status.
+          nullable: true
+        metatags:
+          title: JSON object
+          type: object
+          additionalProperties:
+            nullable: true
+          description: "Metatags provide for the ability to assign metadata to projects in the form of key-value pairs. Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria for administrative purposes. Defined.ai does not perform any actions on metatags that customers submit.\r\n\r\nThe root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n\r\nBelow is an example of  a set of metatags:\r\n\r\n    { \r\n        \"rootString\":  \"This is a string\",\r\n        \"rootObject\":  {\r\n\t\t\t\"innerBoolean\": true,\r\n\t\t\t\"innerNumber\": 1,\r\n\t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\"innerNull\": null,\r\n\t\t\t\"innerObject\": {\r\n\t\t\t\t},\r\n\t\t\t\"innerArray\": []\r\n\t\t},\r\n        \"rootArray\": [1, 2, 3, 4]\r\n    }"
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
+      title: JSON object
+      type: object
+      properties:
+        inputDataUnitProperty:
+          type: string
+          description: Name of property for which error exists.
+          nullable: true
+        inputDataUnitPropertyValue:
+          type: string
+          description: Original value of the property for which error exists.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo:
+      title: JSON object
+      type: object
+      properties:
+        id:
+          type: string
+          description: Project Identifier.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Name of the project.
+          nullable: true
+        projectType:
+          type: string
+          description: Code that identifies a project template type
+          nullable: true
+        status:
+          type: string
+          description: The project's current status.
+          nullable: true
+        dateTimeCreated:
+          type: string
+          description: Date and time when the project was created.
+          format: date-time
+        dateTimeLastRun:
+          type: string
+          description: Date and time when the project last ran.
+          format: date-time
+          nullable: true
+        totalNumberInputUnitsSubmitted:
+          type: integer
+          description: Total number of input units submitted for the project.
+          format: int32
+        totalNumberOutputUnitsCompleted:
+          type: integer
+          description: Total number of data units already completed.
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter into field the word 'Bearer' following by space and JWT
+      name: Authorization
+      in: header
+x-tagGroups:
+- name: ' '
+  tags:
+  - Supported Languages
+- name: Project life cycle
+  tags:
+  - Project Management
+  - Subscriptions
+  - Jobs
+  - Input Units
+  - Deliverables
+- name: Speech Technologies
+  tags:
+  - Mean Opinion Score
+  - Pronunciation Validation

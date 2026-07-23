@@ -1,0 +1,458 @@
+openapi: 3.0.1
+info:
+  title: Defined.ai Deliverables Mean Opinion Score API
+  description: "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n"
+  version: v2
+  x-logo:
+    url: https://definedcrowd.azureedge.net/content/images/dai-logo-black.svg
+    backgroundColor: '#FFFFFF'
+    href: https://defined.ai/
+security:
+- Bearer: []
+tags:
+- name: Mean Opinion Score
+  description: Aggregate ratings on the "intelligibility" and "naturalness" of utterances.
+paths:
+  /v2.0/public/projects/MeanOpinionScore:
+    post:
+      tags:
+      - Mean Opinion Score
+      summary: Create Project
+      description: "Creates a Mean Opinion Score project with a specific type and respective options.\r\n            \r\n**Permission Required:** Create Projects"
+      operationId: MeanOpinionScoreProject_CreateProject
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+        required: true
+      responses:
+        '200':
+          description: Project was successfully created.
+        '400':
+          description: Project Options are invalid.
+        '401':
+          description: User is not authorized (invalid/expired token).
+  /v2.0/public/projects/MeanOpinionScore/{projectId}/inputUnits:
+    post:
+      tags:
+      - Mean Opinion Score
+      summary: Upload input units
+      description: "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nThe uploading of input units is an asynchronous process.\r\nOur API performs a variety of syntax evaluations upon method invocation and will return syntax-type errors\r\nimmediately.\r\nIf the uploaded input units passes syntax evaluations, the Project state will change to PROCESSING DATA UPLOAD.\r\nErrors found during asynchronous processing of the uploaded input units will change the Project state to UPLOAD\r\nERRORS.\r\nTo retrieve the specific errors for each input unit call Get Project Status.\r\n            \r\n**Permission Required:** Upload Data"
+      operationId: MeanOpinionScoreProject_UploadProjectInputUnits
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+        required: true
+      responses:
+        '200':
+          description: Input Units were successfully added.
+        '400':
+          description: "Not enough data units.\r\nInvalid input parameters."
+        '401':
+          description: Invalid authentication (project from another enterprise or invalid/expired token).
+        '403':
+          description: "Project not accepting more input units.\r\nInvalid Enterprise Subscription."
+        '404':
+          description: Project does not exist.
+      deprecated: true
+  /v2.0/public/projects/MeanOpinionScore/{projectId}/resultset:
+    get:
+      tags:
+      - Mean Opinion Score
+      summary: Get Result Set
+      description: "Gets result set for the entire project.\r\n            \r\n**Permission Required:** Read Project Properties"
+      operationId: MeanOpinionScoreProject_GetProjectResultSet
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      responses:
+        '200':
+          description: URL to the file containing the results of the project.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults'
+              example:
+                resultsFileUrl: https://someurl/DC/resultset.json
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults'
+              example:
+                resultsFileUrl: https://someurl/DC/resultset.json
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults'
+              example:
+                resultsFileUrl: https://someurl/DC/resultset.json
+        '400':
+          description: Invalid page number or items per page count
+        '401':
+          description: Invalid authentication (project from another enterprise or invalid/expired token).
+        '403':
+          description: Invalid Enterprise Subscription.
+        '404':
+          description: Project does not exist or results do not exist.
+  /v2.0/public/projects/MeanOpinionScore/{projectId}/clone:
+    post:
+      tags:
+      - Mean Opinion Score
+      summary: Clone project
+      description: "Retrieves the project configuration, then creates a new project with the retrieved configuration.\r\n            \r\n**Permission Required:** Create Projects, Read Project Properties"
+      operationId: MeanOpinionScoreProject_CloneProjectConfiguration
+      parameters:
+      - name: projectId
+        in: path
+        description: Project identifier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel'
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel'
+        required: true
+      responses:
+        '200':
+          description: Project was successfully cloned.
+        '400':
+          description: Project Options are invalid.
+        '401':
+          description: User is not authorized (invalid/expired token).
+        '404':
+          description: Project not found.
+components:
+  schemas:
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel:
+      title: JSON object
+      type: object
+      properties:
+        projectName:
+          type: string
+          description: If left as null, a name will be generated from the original plus a timestamp.
+          nullable: true
+        projectId:
+          type: string
+          description: A ID by which new project will be identified.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        ageDistribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel'
+          description: Age Distribution
+          nullable: true
+        genderDistribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel'
+          description: Gender Distribution
+          nullable: true
+        deviceLocationDistribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel'
+          description: Device Location Distribution
+          nullable: true
+      additionalProperties: false
+      description: "Configure the contributors' distribution to meet your requirements.\r\n            \r\n**Disclaimer**\r\n            \r\nThough every effort is made to meet the contributors’ distribution as\r\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\r\nwe need to implement a next-best solution and cannot guarantee a 100%\r\nmatch."
+    DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel:
+      title: JSON object
+      required:
+      - audioFileUrl
+      type: object
+      properties:
+        audioFileUrl:
+          type: string
+          description: URL to the audio file that is going to be listened by the contributors.
+          format: uri
+        id:
+          type: string
+          description: Client generated identifier that will be used as InputUnit Id.
+          format: uuid
+          nullable: true
+          example: 00000000-0000-0000-0000-000000000000
+        details:
+          maxLength: 500
+          type: string
+          description: Client generated additional meta-data. An optional string with at most 500 characters.
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        resultsFileUrl:
+          type: string
+          description: URL to the file containing the results of the project.
+          format: uri
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel:
+      title: JSON object
+      required:
+      - languageConfiguration
+      type: object
+      properties:
+        contributorsDistribution:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel'
+          description: "Configure the contributors' distribution to meet your requirements.\r\n            \r\n**Disclaimer**\r\n            \r\nThough every effort is made to meet the contributors’ distribution as\r\nconfigured, sometimes, due to factors beyond the control of Defined.ai,\r\nwe need to implement a next-best solution and cannot guarantee a 100%\r\nmatch."
+          nullable: true
+        languageConfiguration:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel'
+          description: Language configuration
+        contributorsPerInputUnit:
+          maximum: 5000
+          minimum: 5
+          type: integer
+          description: "ContributorsPerInputUnit determines how many contributors you would like to process that input unit.\r\nThis will allow you to compare executions of the same input unit."
+          format: int32
+          default: 15
+          nullable: true
+        showDataDisclaimer:
+          type: boolean
+          description: Displays a disclaimer to specify that inputs are "Not Customer Data" (displayed within task U.I.)
+          default: false
+      additionalProperties: false
+      description: Mean Opinion Score testing settings
+    ? DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+    : title: JSON object
+      required:
+      - inputUnitDetails
+      type: object
+      properties:
+        inputUnitDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel'
+          description: List of input units.
+        autoStartOnUploadSuccess:
+          type: boolean
+          description: "Your project will automatically start once all data input units\r\nwere successfully uploaded and the project status is UPLOAD SUCCESS"
+          default: false
+          nullable: true
+      additionalProperties: false
+    ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+    : title: JSON object
+      required:
+      - config
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Client generated identifier that will be used as Project Id.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: Project name.
+        config:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel'
+          description: Json structure with the project configuration.
+        metatags:
+          title: JSON object
+          type: object
+          additionalProperties:
+            nullable: true
+          description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n    { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }"
+          nullable: true
+        desiredDeliveryDate:
+          type: string
+          description: This field is for you to inform DC the desired date for Data to be delivered.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        target:
+          type: string
+          description: "Geolocation technology will give an approximate real-world\r\ngeographic location of the device being used and thus the location\r\nof the contributor using the device."
+          nullable: true
+        value:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: "The value is set to greater than 0% but smaller than or equal to\r\n100%. Should the total value be set to less than 100%, the remaining\r\npercentage will have no constraints.\r\n            \r\n**Example**\r\n            \r\nJane Doe sets the device location distribution to 75% of the\r\nparticipants being in a particular geographic location. The\r\nremaining 25% will be randomly distributed. Therefore, Jane Doe\r\nmust be aware that some of the 25% random distribution may also\r\ninclude the particular geographic location that was set."
+          format: int32
+      additionalProperties: false
+      description: Device Location Distribution
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel:
+      title: JSON object
+      required:
+      - languageCode
+      type: object
+      properties:
+        languageCode:
+          minLength: 1
+          type: string
+          description: Language code. (e.g. "en-us")
+        requireLanguageTest:
+          type: boolean
+          description: "If selected, the project requires the contributors to do a language test\r\n(if available for the selected language) to guarantee that they are native speakers."
+          default: false
+          nullable: true
+      additionalProperties: false
+      description: Language configurations.
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        target:
+          enum:
+          - Male
+          - Female
+          type: string
+          description: "The gender category makes provision for biological sexes female and male.\r\nThough third gender preference are respected as a choice, we would like to\r\nconfirm biological sex of contributors."
+          x-enumNames:
+          - Male
+          - Female
+          x-enumDescriptions:
+          - ''
+          - ''
+          x-ms-enum:
+            name: GenderDistributionRange
+            modelAsString: true
+        value:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: "**Custom distribution**\r\n            \r\nMeans the value is set to greater than 0% but\r\nsmaller than or equal to 100%. Should the total value\r\nbe set to less than 100%, the remaining percentage\r\nis set with the default distribution.\r\n            \r\n**Default distribution**\r\n            \r\nMeans that the values are randomized but comply with the job\r\nconfiguration. For example, language settings are taken into\r\nconsideration, as well as country and region settings. Without any\r\ncontributors’ distribution restriction, whoever is qualified may\r\nenter the job.\r\n            \r\n**Example**\r\n            \r\nJohn Doe sets the gender distribution to 75% of the participants\r\nbeing in the Female category. The remaining 25% will be randomly\r\ndistributed between the gender categories. Therefore, John must be\r\naware that some of the 25% random distribution may also include the\r\nFemale category."
+          format: int32
+      additionalProperties: false
+      description: Gender Distribution
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel:
+      title: JSON object
+      required:
+      - meanOpinionScore
+      type: object
+      properties:
+        meanOpinionScore:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel'
+          description: Mean Opinion Score settings.
+      additionalProperties: false
+      description: Json structure with the project configuration.
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        target:
+          enum:
+          - Adult
+          - Senior
+          type: string
+          description: "There are two age categories in the distribution.\r\nYou can select Adult or Senior with age categories 18 – 64 years\r\nand 65 years and above, respectively."
+          x-enumNames:
+          - Adult
+          - Senior
+          x-enumDescriptions:
+          - ''
+          - ''
+          x-ms-enum:
+            name: AgeDistributionRange
+            modelAsString: true
+        value:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: "**Custom distribution**\r\n            \r\nMeans the value is set to greater than 0% but\r\nsmaller than or equal to 100%. Should the total value\r\nbe set to less than 100%, the remaining percentage\r\nis set with the default distribution.\r\n            \r\n**Default distribution**\r\n            \r\nMeans that the values are randomized but comply with\r\nthe job configuration. For example, language settings\r\nare taken into consideration, as well as country and\r\nregion settings. Without any contributors’ distribution\r\nrestriction, whoever is qualified may enter the job.\r\n            \r\n**Examples**\r\n            \r\nJane Doe sets the age distribution to 75% of the participants being\r\nin the Adult category. The remaining 25% will be randomly distributed\r\nbetween the age categories. Therefore, Jane must be aware that some\r\nof the 25% random distribution may also include the Adult category."
+          format: int32
+      additionalProperties: false
+      description: Age Distribution
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter into field the word 'Bearer' following by space and JWT
+      name: Authorization
+      in: header
+x-tagGroups:
+- name: ' '
+  tags:
+  - Supported Languages
+- name: Project life cycle
+  tags:
+  - Project Management
+  - Subscriptions
+  - Jobs
+  - Input Units
+  - Deliverables
+- name: Speech Technologies
+  tags:
+  - Mean Opinion Score
+  - Pronunciation Validation
