@@ -1,0 +1,28 @@
+{
+  "provider": "definedcrowd",
+  "sources": [
+    "definedcrowd-deliverables-api-openapi.yml",
+    "definedcrowd-input-units-api-openapi.yml",
+    "definedcrowd-jobs-api-openapi.yml",
+    "definedcrowd-mean-opinion-score-api-openapi.yml",
+    "definedcrowd-project-management-api-openapi.yml",
+    "definedcrowd-pronunciation-validation-api-openapi.yml",
+    "definedcrowd-subscriptions-api-openapi.yml",
+    "definedcrowd-supported-languages-api-openapi.yml"
+  ],
+  "outputs": [
+    "definedcrowd-deliverables-api-openapi.yml",
+    "definedcrowd-input-units-api-openapi.yml",
+    "definedcrowd-jobs-api-openapi.yml",
+    "definedcrowd-mean-opinion-score-api-openapi.yml",
+    "definedcrowd-project-management-api-openapi.yml",
+    "definedcrowd-pronunciation-validation-api-openapi.yml",
+    "definedcrowd-subscriptions-api-openapi.yml",
+    "definedcrowd-supported-languages-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

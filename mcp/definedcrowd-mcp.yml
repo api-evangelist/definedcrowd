@@ -1,0 +1,97 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+server:
+  name: definedcrowd
+  transport: stdio
+source: openapi/definedcrowd-openapi-original.json
+note: Candidate MCP tool list derived one-per-operation from the Defined.ai Public API OpenAPI. No official
+  hosted MCP server found.
+tools:
+- name: Languages_GetLanguages
+  description: Get supported languages
+  source_operation: openapi/definedcrowd-openapi-original.json#Languages_GetLanguages
+- name: Subscriptions_SubmitSubscriptions
+  description: Put Subscriptions
+  source_operation: openapi/definedcrowd-openapi-original.json#Subscriptions_SubmitSubscriptions
+- name: Subscriptions_GetSubscriptions
+  description: Get Subscriptions
+  source_operation: openapi/definedcrowd-openapi-original.json#Subscriptions_GetSubscriptions
+- name: Subscriptions_DeleteSubscription
+  description: Delete Subscription
+  source_operation: openapi/definedcrowd-openapi-original.json#Subscriptions_DeleteSubscription
+- name: Projects_CloneProject
+  description: Clone Project
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_CloneProject
+- name: Projects_GetProjects
+  description: Get Projects
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_GetProjects
+- name: Projects_GetProjectDetails
+  description: Get Project Details
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_GetProjectDetails
+- name: Projects_EditProject
+  description: Edit Project
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_EditProject
+- name: Projects_GetProjectStatus
+  description: Get Project Status
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_GetProjectStatus
+- name: Projects_CancelProject
+  description: Cancel Project
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_CancelProject
+- name: Projects_DeleteProject
+  description: Delete Project
+  source_operation: openapi/definedcrowd-openapi-original.json#Projects_DeleteProject
+- name: Jobs_GetJobs
+  description: Get Jobs
+  source_operation: openapi/definedcrowd-openapi-original.json#Jobs_GetJobs
+- name: Jobs_EditJob
+  description: Edit Job
+  source_operation: openapi/definedcrowd-openapi-original.json#Jobs_EditJob
+- name: UploadManagement_GetInputUnitSchema
+  description: Get Input Unit Schema
+  source_operation: openapi/definedcrowd-openapi-original.json#UploadManagement_GetInputUnitSchema
+- name: UploadManagement_UploadInputUnits
+  description: Upload Input Units
+  source_operation: openapi/definedcrowd-openapi-original.json#UploadManagement_UploadInputUnits
+- name: UploadManagement_GetProjectErrors
+  description: Get Project Errors
+  source_operation: openapi/definedcrowd-openapi-original.json#UploadManagement_GetProjectErrors
+- name: UploadManagement_GetProjectUploads
+  description: Get Project Uploads
+  source_operation: openapi/definedcrowd-openapi-original.json#UploadManagement_GetProjectUploads
+- name: UploadManagement_GetProjectUpload
+  description: Get Project Upload
+  source_operation: openapi/definedcrowd-openapi-original.json#UploadManagement_GetProjectUpload
+- name: ProjectsDeliverables_GetDeliverables
+  description: Get Deliverables
+  source_operation: openapi/definedcrowd-openapi-original.json#ProjectsDeliverables_GetDeliverables
+- name: ProjectsDeliverables_GetDeliverablesDetails
+  description: Get Deliverable Details
+  source_operation: openapi/definedcrowd-openapi-original.json#ProjectsDeliverables_GetDeliverablesDetails
+- name: ProjectsDeliverables_GetDeliverablesDownload
+  description: Get Deliverable Download
+  source_operation: openapi/definedcrowd-openapi-original.json#ProjectsDeliverables_GetDeliverablesDownload
+- name: MeanOpinionScoreProject_CreateProject
+  description: Create Project
+  source_operation: openapi/definedcrowd-openapi-original.json#MeanOpinionScoreProject_CreateProject
+- name: MeanOpinionScoreProject_UploadProjectInputUnits
+  description: Upload input units
+  source_operation: openapi/definedcrowd-openapi-original.json#MeanOpinionScoreProject_UploadProjectInputUnits
+- name: MeanOpinionScoreProject_GetProjectResultSet
+  description: Get Result Set
+  source_operation: openapi/definedcrowd-openapi-original.json#MeanOpinionScoreProject_GetProjectResultSet
+- name: MeanOpinionScoreProject_CloneProjectConfiguration
+  description: Clone project
+  source_operation: openapi/definedcrowd-openapi-original.json#MeanOpinionScoreProject_CloneProjectConfiguration
+- name: PronunciationValidationProject_CreateProject
+  description: Create Project
+  source_operation: openapi/definedcrowd-openapi-original.json#PronunciationValidationProject_CreateProject
+- name: PronunciationValidationProject_UploadProjectInputUnits
+  description: Upload input units
+  source_operation: openapi/definedcrowd-openapi-original.json#PronunciationValidationProject_UploadProjectInputUnits
+- name: PronunciationValidationProject_GetProjectResultSet
+  description: Get Result Set
+  source_operation: openapi/definedcrowd-openapi-original.json#PronunciationValidationProject_GetProjectResultSet
+- name: PronunciationValidationProject_CloneProjectConfiguration
+  description: Clone project
+  source_operation: openapi/definedcrowd-openapi-original.json#PronunciationValidationProject_CloneProjectConfiguration

@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/definedcrowd-openapi-original.json
+skills:
+- file: definedcrowd-mean-opinion-score-project.md
+  name: Run a Mean Opinion Score project
+  api: openapi/definedcrowd-openapi-original.json
+  operations:
+  - MeanOpinionScoreProject_CreateProject
+  - MeanOpinionScoreProject_UploadProjectInputUnits
+  - Projects_GetProjectStatus
+  - MeanOpinionScoreProject_GetProjectResultSet
+- file: definedcrowd-deliverables-and-notifications.md
+  name: Retrieve deliverables and manage notifications
+  api: openapi/definedcrowd-openapi-original.json
+  operations:
+  - Projects_GetProjects
+  - Projects_GetProjectStatus
+  - ProjectsDeliverables_GetDeliverables
+  - ProjectsDeliverables_GetDeliverablesDownload
+  - Subscriptions_SubmitSubscriptions

@@ -1,0 +1,54 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/definedcrowd-openapi-original.json
+summary: >-
+  Cross-cutting request/response semantics for the Defined.ai Public API v2.0,
+  derived from the OpenAPI definition.
+authentication:
+  style: bearer-jwt-apikey
+  location: header
+  header: Authorization
+  scheme: "Bearer <JWT>"
+  notes: Requires a Defined.ai Enterprise account; token is a JWT passed as a Bearer credential.
+  ref: authentication/definedcrowd-authentication.yml
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header or idempotent-retry contract is documented in the spec.
+pagination:
+  style: page-number
+  params:
+  - pageNumber
+  - itemsPerPage
+  sorting:
+  - sortBy
+  - sortDirection
+  applies_to:
+  - Projects_GetProjects
+  - Jobs_GetJobs
+  - UploadManagement_GetProjectErrors
+  - UploadManagement_GetProjectUploads
+  - ProjectsDeliverables_GetDeliverables
+versioning:
+  scheme: uri-path
+  current: v2.0
+  path_prefix: /v2.0/public
+  ref: lifecycle/definedcrowd-lifecycle.yml
+notifications:
+  style: email-subscription
+  types:
+  - DeliverablePublished
+  - DataUploadCompleted
+  notes: >-
+    Event notifications are delivered by email to subscribed recipients (no HTTP
+    webhook callback surface). Managed via the Subscriptions endpoints.
+error_envelope:
+  format: http-status
+  ref: errors/definedcrowd-problem-types.yml
+rate_limiting:
+  documented: false
+content_types:
+  request:
+  - application/json
+  - application/json-patch+json
+  response:
+  - application/json

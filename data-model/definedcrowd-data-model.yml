@@ -1,0 +1,55 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/definedcrowd-openapi-original.json
+entities:
+- name: Project
+  key: projectId
+  description: A data project (including Mean Opinion Score and Pronunciation Validation project types).
+- name: Job
+  key: jobId
+  description: A unit of work within a project.
+- name: InputUnit
+  key: uploadId
+  description: Uploaded input data units for a project; tracked via uploads and upload errors.
+- name: Deliverable
+  key: deliverableId
+  description: A produced output artifact of a project, downloadable when published.
+- name: Subscription
+  key: type
+  description: An email notification subscription on a project (DeliverablePublished, DataUploadCompleted).
+- name: Language
+  key: code
+  description: A supported language/dialect/locale for project configuration.
+relationships:
+- from: Job
+  to: Project
+  kind: belongs_to
+  via: projectId
+- from: InputUnit
+  to: Project
+  kind: belongs_to
+  via: projectId
+- from: Deliverable
+  to: Project
+  kind: belongs_to
+  via: projectId
+- from: Subscription
+  to: Project
+  kind: belongs_to
+  via: projectId
+- from: Project
+  to: Job
+  kind: has_many
+  via: projectId
+- from: Project
+  to: Deliverable
+  kind: has_many
+  via: projectId
+- from: Project
+  to: Subscription
+  kind: has_many
+  via: projectId
+- from: Project
+  to: InputUnit
+  kind: has_many
+  via: projectId

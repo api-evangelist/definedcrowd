@@ -1,26 +1,233 @@
 aid: definedcrowd
-name: definedcrowd
-description: definedcrowd is a company surfaced as a portfolio company of balderton-capital and added
-  to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+name: Defined.ai (DefinedCrowd)
+description: >-
+  Defined.ai (formerly DefinedCrowd) is an AI training data platform and
+  marketplace founded in 2015 by Daniela Braga, headquartered in Seattle with
+  offices in Lisbon, Porto, and Tokyo. It provides ready-to-use datasets across
+  speech, text, image, video, and multimodal, plus custom data collection,
+  annotation, machine translation, conversational AI, LLM fine-tuning, and data
+  and model evaluation services sourced from a global community of 1.6M+ vetted
+  contributors across 150+ markets and 500+ languages, dialects, and locales.
+  The Defined.ai Public API (v2.0) lets enterprise customers manage projects
+  programmatically — create Mean Opinion Score and Pronunciation Validation
+  projects, upload input units, configure supported languages, track project
+  status and errors, manage jobs, retrieve deliverables, and subscribe to
+  notifications. Data provenance and compliance are backed by ISO 27001, ISO
+  27701, ISO 42001, GDPR, and HIPAA.
 url: https://raw.githubusercontent.com/api-evangelist/definedcrowd/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - balderton-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched-from-public-api
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
+image: https://defined.ai/favicon.ico
 tags:
 - Company
-apis: []
+- AI Training Data
+- Data Marketplace
+- Machine Learning
+- Data Annotation
+- Speech Data
+- Natural Language Processing
+- Crowdsourcing
+- Artificial Intelligence
+apis:
+- aid: definedcrowd:definedcrowd-deliverables-api
+  name: Defined.ai (DefinedCrowd) Deliverables API
+  description: >-
+    The result file is created after the project is completed and is referred to as deliverables. The
+    file contains contributor metadata for completed input units.
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Deliverables
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-deliverables-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-input-units-api
+  name: Defined.ai (DefinedCrowd) Input Units API
+  description: "Each input unit is a single component of work done by the contributors. There are several\
+    \ types of units – audio, text, and image. In a given project, all units should have the same structure.\
+    \ The input unit schema explains the structure of input units. \n\n Note: Input Units are a part of\
+    \ projects. They are not separate entities."
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Input Units
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-input-units-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-jobs-api
+  name: Defined.ai (DefinedCrowd) Jobs API
+  description: >-
+    Jobs are how your data (input units) connects the project with our contributors. Each job has data,
+    instructions, and customizable parameters, which then convert inputs to outputs. Parameters are customizable
+    according to your project needs.
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-mean-opinion-score-api
+  name: Defined.ai (DefinedCrowd) Mean Opinion Score API
+  description: Aggregate ratings on the "intelligibility" and "naturalness" of utterances.
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Mean Opinion Score
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-mean-opinion-score-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-project-management-api
+  name: Defined.ai (DefinedCrowd) Project Management API
+  description: >-
+    Informally, projects can be viewed as configurable packages that process sets of Input Units. The
+    project’s template determines how the Input Units are processed. Projects can be retrieved and managed
+    as needed through the following methods:
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Project Management
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-project-management-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-pronunciation-validation-api
+  name: Defined.ai (DefinedCrowd) Pronunciation Validation API
+  description: Confirm audio meets pronunciation standards.
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Pronunciation Validation
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-pronunciation-validation-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-subscriptions-api
+  name: Defined.ai (DefinedCrowd) Subscriptions API
+  description: >-
+    Subscribe to automatic notifications for specific email addresses. Email notifications are sent for
+    events that happen during the life cycle of the project.
+
+     <small> By using this service, the user fully agrees with Defined.ai's service <a href="https://www.defined.ai/terms-of-use/">Terms
+    of Use</a>, and acknowledges and understands that any processing of personal data will be carried
+    out according to the terms of Defined.ai's <a href="https://www.defined.ai/privacy-policy/">Privacy
+    Policy</a>. The user further acknowledges that it is fully responsible for obtaining and managing
+    all necessary valid consents from all data subjects whose email address is being subscribed by the
+    user, for the sole purposes of receiving service notifications in context of Defined.ai provided services,
+    in compliance with all applicable data protection laws, including the EU General Data Protection Regulation
+    (GDPR) and the California Consumer Privacy Act (CCPA). The user also acknowledges that it is fully
+    responsible for unsubscribing such emails once no longer necessary for these purposes or in case the
+    data subject has removed its consent.
+
+     Defined.ai reserves the right to proceed with the immediate service suspension without any prior
+    notice, if it detects service abuse, non-compliance with the above obligations or in case it receives
+    complaints from data subjects that have not provided their consent for the subscription of their email.
+    </small>
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-subscriptions-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
+- aid: definedcrowd:definedcrowd-supported-languages-api
+  name: Defined.ai (DefinedCrowd) Supported Languages API
+  description: >-
+    Several of the Workflow Templates offer the ability to set a language / country code. These configurations
+    instruct Defined.ai to use our human intelligence Contributors that speak and / or reside in the specified
+    language / country. The REST API provides a method called “Get Supported Languages” that returns the
+    set of languages, language features and associated language codes that are used by our APIs and supported
+    by the Defined.ai platform.
+  humanURL: https://developers.definedcrowd.com/
+  baseURL: https://api.production-na01.definedcrowd.com
+  tags:
+  - Supported Languages
+  properties:
+  - type: OpenAPI
+    url: openapi/definedcrowd-supported-languages-api-openapi.yml
+  - type: APIReference
+    url: https://developers.definedcrowd.com/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/definedcrowd-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/definedcrowd-agentic-access.yml
+- type: Authentication
+  url: authentication/definedcrowd-authentication.yml
 - type: Website
   url: https://www.definedcrowd.com/
+- type: DeveloperPortal
+  url: https://developers.definedcrowd.com/
+- type: Documentation
+  url: https://developers.definedcrowd.com/
+- type: Blog
+  url: https://defined.ai/blog
+- type: Support
+  url: https://defined.ai/contact-us
+- type: TermsOfService
+  url: https://defined.ai/terms-of-use
+- type: PrivacyPolicy
+  url: https://defined.ai/privacy-policy
+- type: SignUp
+  url: https://enterprise.definedcrowd.com
+- type: LLMsTxt
+  url: https://defined.ai/llms.txt
+- type: ErrorCatalog
+  url: errors/definedcrowd-problem-types.yml
+- type: Conventions
+  url: conventions/definedcrowd-conventions.yml
+- type: DataModel
+  url: data-model/definedcrowd-data-model.yml
+- type: MCPServer
+  url: mcp/definedcrowd-mcp.yml
+- type: Overlay
+  url: overlays/definedcrowd-openapi-overlay.yaml
+- type: Conformance
+  url: conformance/definedcrowd-conformance.yml
+- type: Compliance
+  url: https://defined.ai/about-us
+- type: Lifecycle
+  url: lifecycle/definedcrowd-lifecycle.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

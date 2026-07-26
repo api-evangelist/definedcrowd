@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/definedcrowd-openapi-original.json
+format: http-status
+envelope: >-
+  Errors are returned with the corresponding HTTP status code. The Defined.ai
+  Public API does not use RFC 9457 application/problem+json; error responses
+  carry a plain status code and message.
+problems:
+- status: 400
+  title: Invalid parameters
+  description: The request contained invalid or malformed parameters.
+  remediation: Validate request body/query parameters against the OpenAPI schema before retrying.
+- status: 401
+  title: Invalid authentication
+  description: Invalid or expired token. The Authorization header must carry a valid Bearer JWT.
+  remediation: Obtain a fresh JWT for your Defined.ai Enterprise account and retry.
+- status: 403
+  title: Invalid Enterprise Subscription
+  description: The authenticated account does not have an active/valid Defined.ai Enterprise subscription for this operation.
+  remediation: Contact Defined.ai sales (sales@defined.ai) to activate or verify your Enterprise subscription.
+- status: 404
+  title: Resource not found
+  description: The referenced project (or nested resource) does not exist.
+  remediation: Confirm the projectId/jobId/uploadId/deliverableId is correct and owned by your account.

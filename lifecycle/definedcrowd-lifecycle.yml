@@ -1,0 +1,20 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/definedcrowd-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v2.0
+  path_prefix: /v2.0/public
+  docs: https://developers.definedcrowd.com/
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No published deprecation/sunset policy found.
+sla:
+  url: null
+status_page: null
+deprecated_operations: []
+notes: >-
+  No public status page (status.defined.ai / status.definedcrowd.com not
+  reachable) and no deprecation policy were found during enrichment. Versioning
+  is via URI path (v2.0).

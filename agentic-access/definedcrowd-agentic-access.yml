@@ -1,0 +1,390 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/definedcrowd-openapi-original.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 29
+  by_action_class:
+    connected: 15
+    acting: 14
+  by_consequence:
+    read: 15
+    write: 14
+  human_in_the_loop_required: 0
+operations:
+- path: /v2.0/public/languages
+  method: get
+  operationId: Languages_GetLanguages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/subscriptions
+  method: put
+  operationId: Subscriptions_SubmitSubscriptions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/subscriptions
+  method: get
+  operationId: Subscriptions_GetSubscriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/subscriptions/{type}
+  method: delete
+  operationId: Subscriptions_DeleteSubscription
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{sourceProjectId}/clone
+  method: post
+  operationId: Projects_CloneProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects
+  method: get
+  operationId: Projects_GetProjects
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}
+  method: get
+  operationId: Projects_GetProjectDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}
+  method: put
+  operationId: Projects_EditProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/status
+  method: get
+  operationId: Projects_GetProjectStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/cancel
+  method: put
+  operationId: Projects_CancelProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/delete
+  method: delete
+  operationId: Projects_DeleteProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/jobs
+  method: get
+  operationId: Jobs_GetJobs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/jobs/{jobId}
+  method: put
+  operationId: Jobs_EditJob
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/inputUnitsSchema
+  method: get
+  operationId: UploadManagement_GetInputUnitSchema
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/inputUnits
+  method: post
+  operationId: UploadManagement_UploadInputUnits
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/{projectId}/errors
+  method: get
+  operationId: UploadManagement_GetProjectErrors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/uploads
+  method: get
+  operationId: UploadManagement_GetProjectUploads
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/uploads/{uploadId}
+  method: get
+  operationId: UploadManagement_GetProjectUpload
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/deliverables
+  method: get
+  operationId: ProjectsDeliverables_GetDeliverables
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/deliverables/{deliverableId}
+  method: get
+  operationId: ProjectsDeliverables_GetDeliverablesDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/{projectId}/deliverables/{deliverableId}/download
+  method: get
+  operationId: ProjectsDeliverables_GetDeliverablesDownload
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/MeanOpinionScore
+  method: post
+  operationId: MeanOpinionScoreProject_CreateProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/MeanOpinionScore/{projectId}/inputUnits
+  method: post
+  operationId: MeanOpinionScoreProject_UploadProjectInputUnits
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/MeanOpinionScore/{projectId}/resultset
+  method: get
+  operationId: MeanOpinionScoreProject_GetProjectResultSet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/MeanOpinionScore/{projectId}/clone
+  method: post
+  operationId: MeanOpinionScoreProject_CloneProjectConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/PronunciationValidation
+  method: post
+  operationId: PronunciationValidationProject_CreateProject
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/PronunciationValidation/{projectId}/inputUnits
+  method: post
+  operationId: PronunciationValidationProject_UploadProjectInputUnits
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2.0/public/projects/PronunciationValidation/{projectId}/resultset
+  method: get
+  operationId: PronunciationValidationProject_GetProjectResultSet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2.0/public/projects/PronunciationValidation/{projectId}/clone
+  method: post
+  operationId: PronunciationValidationProject_CloneProjectConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required

@@ -1,0 +1,3345 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Defined.ai API",
+    "description": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai\u2019s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai\u2019s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it\u2019ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based \u201cprompts\u201d that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) \u2013 A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) \u2013 Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) \u2013 This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) \u2013 When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an \u201c**Access Key ID**\u201d and an \u201c**Access Key Secret**\u201d \nthat can be secured through Defined.ai\u2019s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API\u2019s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions\u202f  | Rest API Permissions\u202f|\n| :--- | :--- |\n| View Projects\u202f| List Projects\u202f<br/> Read Project Properties\u202f\u202f |\n| Create Projects | List Projects\u202f<br/> Read Project Properties <br/>Create Projects\u202f<br/> Upload Data\u202f<br/> Update Project Properties |\n| Full Projects\u202f| List Projects\u202f<br/> Read Project Properties\u202f<br/> Create Projects\u202f<br/> Upload Data\u202f<br/> Update Project Properties\u202f<br/>Delete Project\u202f<br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It\u2019s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 \u2014 everything\n\n\nAfter the authentication has been done successfully, it\u2019s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+    "version": "v2",
+    "x-logo": {
+      "url": "https://definedcrowd.azureedge.net/content/images/dai-logo-black.svg",
+      "backgroundColor": "#FFFFFF",
+      "href": "https://defined.ai/"
+    }
+  },
+  "paths": {
+    "/v2.0/public/languages": {
+      "get": {
+        "tags": [
+          "Supported Languages"
+        ],
+        "summary": "Get supported languages",
+        "description": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nReturns a list of language and country combinations supported by Defined.ai, the language code associated\r\nwith each combination, and whether Defined.ai supports the ability to source for a specific language\u2019s\r\nnative speakers, all of whom have passed a series of language tests administered by Defined.ai.\r\n            \r\nThe Language code may be added to the Configuration of a Project. If you need to source high-quality data\r\nfrom native speakers, the value nativeSpeakerSupported will indicate whether Defined.ai supports that\r\ncapability the specific language you\u2019re looking for.\r\n\r\nThe number of languages we support varies. \r\n\r\nDefined.ai currently supports the following languages:    \r\n            \r\n            \r\n\r\n| **Language** | **Country** | **Language Code + Country** |\r\n|:------------:|:-----------:|:---------------------------:|\r\n| **Arabic**| Egypt\u00a0| ar-EG\u00a0|\r\n| **Arabic**| Jordan\u00a0| ar-JO\u00a0|\r\n| **Arabic**| Morocco\u00a0| ar-MA\u00a0|\r\n| **Arabic**| Saudi Arabia\u00a0| ar-SA\u00a0|\r\n| **Arabic**| United Arab Emirates\u00a0| ar-AE\u00a0|\r\n| **Arabic**| Yemen\u00a0| ar-YE\u00a0|\r\n| **Basque**| Spain\u00a0| eu-ES\u00a0|\r\n| **Bengali**| India\u00a0| bn-IN\u00a0|\r\n| **Catalan**| Spain\u00a0| ca-ES\u00a0|\r\n| **Chinese Simplified**| China (Mandarin)\u00a0| zh-CN\u00a0|\r\n| **Chinese Simplified**| Singapore (Mandarin)\u00a0| zh-SG\u00a0|\r\n| **Chinese Traditional**| Taiwan (Mandarin)\u00a0| zh-TW\u00a0|\r\n| **Chinese Traditional**| Hong Kong (Cantonese)\u00a0| zh-HK\u00a0|\r\n| **Croatian**| Croatia\u00a0| hr-HR\u00a0|\r\n| **Czech**| Czech Republic\u00a0| cs-CZ\u00a0|\r\n| **Danish**| Denmark\u00a0| da-DK\u00a0|\r\n| **Danish**| Greenland\u00a0| da-GL\u00a0|\r\n| **Dutch**| Netherlands\u00a0| nl-NL\u00a0|\r\n| **Dutch**| Belgium (Flemish)\u00a0| nl-BE\u00a0|\r\n| **English**| United Kingdom\u00a0| en-GB\u00a0|\r\n| **English**| United States\u00a0| en-US\u00a0|\r\n| **English**| Canada\u00a0| en-CA\u00a0|\r\n| **English**| Philippines\u00a0| en-PH\u00a0|\r\n| **English**| Singapore\u00a0| en-SG\u00a0|\r\n| **English**| Australia\u00a0| en-AU\u00a0|\r\n| **English**| New Zealand\u00a0| en-NZ\u00a0|\r\n| **English**| India\u00a0| en-IN\u00a0|\r\n| **English**| Ireland\u00a0| en-IE\u00a0|\r\n| **English**| South Africa\u00a0| en-ZA\u00a0|\r\n| **Estonian**| Estonia\u00a0| et-EE\u00a0|\r\n| **Finnish**| Finland\u00a0| fi-Fl\u00a0|\r\n| **French**| France\u00a0| fr-FR\u00a0|\r\n| **French**| Belgium\u00a0| fr-BE\u00a0|\r\n| **French**| Canada\u00a0| fr-CA\u00a0|\r\n| **Galician**| Spain\u00a0| gl-ES\u00a0|\r\n| **German**| Germany\u00a0| de-DE\u00a0|\r\n| **German**| Belgium\u00a0| de-BE\u00a0|\r\n| **German**| Austria\u00a0| de-AT\u00a0|\r\n| **German**| Switzerland\u00a0| de-CH\u00a0|\r\n| **Greek**| Greece\u00a0| el-GR\u00a0|\r\n| **Gujarati**| India\u00a0| gu-IN\u00a0|\r\n| **Hebrew**| Israel\u00a0| he-IL\u00a0|\r\n| **Hindi**| India\u00a0| hi-IN\u00a0|\r\n| **Hungarian**| Hungary\u00a0| hu-HU\u00a0|\r\n| **Indonesian (Bahasa)**| Indonesia\u00a0| id-ID\u00a0|\r\n| **Irish**| Ireland\u00a0| ga-IE\u00a0|\r\n| **Italian**| Italy\u00a0| it-IT\u00a0|\r\n| **Japanese**| Japan\u00a0| ja-JP\u00a0|\r\n| **Kannada**| India\u00a0| ml-IN\u00a0|\r\n| **Korean**| South Korea\u00a0| ko-KR\u00a0|\r\n| **Latvian**| Latvia\u00a0| lv-LV\u00a0|\r\n| **Lithuanian**| Lithuania\u00a0| lt-LT\u00a0|\r\n| **Malay**| Malaysia\u00a0| ms-MY\u00a0|\r\n| **Malayalam**| India\u00a0| ml-IN\u00a0|\r\n| **Marathi**| India\u00a0| mr-IN\u00a0|\r\n| **Norwegian Bokm\u00e5l**| Norway\u00a0| nb-NO\u00a0|\r\n| **Persian / Farsi**| Iran\u00a0| fa-IR\u00a0|\r\n| **Polish**| Poland\u00a0| pl-PL\u00a0|\r\n| **Portuguese**| Portugal\u00a0| pt-PT\u00a0|\r\n| **Portuguese**| Brazil\u00a0| pt-BR\u00a0|\r\n| **Portuguese**| Angola\u00a0| pt-AO\u00a0|\r\n| **Portuguese**| Mozambique\u00a0| pt-MZ\u00a0|\r\n| **Punjabi**| India\u00a0| pa-IN\u00a0|\r\n| **Romanian**| Romania\u00a0| ro-RO\u00a0|\r\n| **Russian**| Russia\u00a0| ru-RU\u00a0|\r\n| **Slovak**| Slovakia\u00a0| sk-SK\u00a0|\r\n| **Slovenian**| Slovenia\u00a0| sl-SI\u00a0|\r\n| **Spanish**| Spain\u00a0| es-ES\u00a0|\r\n| **Spanish**| Argentina\u00a0| es-AR\u00a0|\r\n| **Spanish**| Chile\u00a0| es-CL\u00a0|\r\n| **Spanish**| Colombia\u00a0| es-CO\u00a0|\r\n| **Spanish**| Mexico\u00a0| es-MX\u00a0|\r\n| **Spanish**| Peru\u00a0| es-PE\u00a0|\r\n| **Spanish**| Paraguay\u00a0| es-PY\u00a0|\r\n| **Spanish**| United States\u00a0| es-US\u00a0|\r\n| **Spanish**| Venezuela\u00a0| es-VE\u00a0|\r\n| **Swedish**| Sweden\u00a0| sv-SE\u00a0|\r\n| **Tamil**| Singapore\u00a0| ta-SG\u00a0|\r\n| **Telugu**| India\u00a0| te-IN\u00a0|\r\n| **Thai**| Thailand\u00a0| th-TH\u00a0|\r\n| **Turkish**| Turkey\u00a0| tr-TR\u00a0|\r\n| **Ukrainian**| Ukraine\u00a0| uk-UA\u00a0|\r\n| **Urdu**| India\u00a0| ur-IN\u00a0|\r\n| **Vietnamese**| Vietnam\u00a0| vi-VN\u00a0|\r\n\r\n            \r\n\n\r\n**Permission Required:** None",
+        "operationId": "Languages_GetLanguages",
+        "responses": {
+          "200": {
+            "description": "Returns a list with the language information.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2.0/public/projects/{projectId}/subscriptions": {
+      "put": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Put Subscriptions",
+        "description": "Subscribe or edit the list of email addresses that receive the notifications.\r\nCurrently, the following types of events are available for subscription:\r\n            \r\n**Data Upload Completed:** Receive a notification when an upload of data for the project\r\nis completed, including information if any errors were found. The email is only sent after\r\nthe asynchronous part of the upload is finished. Note that you will receive an email per each\r\ninput unit set uploaded. You can know more\r\nin <a href=\"#tag/Input-Units\">data upload section</a>.\r\n            \r\n**Deliverable Published:** Receive a notification when a new result file for the project is available to\r\ndownload. You can know more in the\r\n<a href=\"#tag/Deliverables\">deliverables section</a>.\r\n            \r\n**Permissions:** Update Project Properties",
+        "operationId": "Subscriptions_SubmitSubscriptions",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Subscriptions.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. Subscription will be configured asynchronously."
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "403": {
+            "description": "Email consent is missing (or invalid), subscription can\u2019t be done without email consent."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Get Subscriptions",
+        "description": "Retrieves a list of subscribed notifications within a specific project.\r\n            \r\n**Permissions:** Read Project Properties",
+        "operationId": "Subscriptions_GetSubscriptions",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Returns a list with project subscriptions.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/subscriptions/{type}": {
+      "delete": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Delete Subscription",
+        "description": "Allows to unsubscribe each of the existing notifications. \r\n             \r\n**Permissions**: Update Project Properties",
+        "operationId": "Subscriptions_DeleteSubscription",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\".",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted. Subscription will be deleted asynchronously."
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist / Subscription type is not configured."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{sourceProjectId}/clone": {
+      "post": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Clone Project",
+        "description": "Cloning a project creates a copy of the setup configuration and other elements.\r\nA new project with the same configuration, properties and jobs as the source project is created.  \r\n\r\n**Permission Required:** Create Project",
+        "operationId": "Projects_CloneProject",
+        "parameters": [
+          {
+            "name": "sourceProjectId",
+            "in": "path",
+            "description": "Source Project ID. The project is copied from this ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. Project will be cloned asynchronously.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Source project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects": {
+      "get": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Get Projects",
+        "description": "Retrieves a comprehensive list of projects and the respective information about those projects associated\r\nwith an Enterprise account. This includes Projects created through the REST API and the Enterprise Portal.\r\n            \r\n**Permission Required:** List Projects",
+        "operationId": "Projects_GetProjects",
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "The page to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a List with project Information.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid page number or items per page count"
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}": {
+      "get": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Get Project Details",
+        "description": "Retrieves the information associated with a Project.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "Projects_GetProjectDetails",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns project details.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Edit Project",
+        "description": "Allows you to edit project settings such as name and desired delivery date, after creation or cloning.\r\nThe editing function stops once the first upload of input units begin and the NOT ACTIVE project state\r\nis changed.\r\n            \r\nNote: both fields must be provided to update either one of them. \r\n\r\n**Permission Required:** Update Project Properties",
+        "operationId": "Projects_EditProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. Project is updated asynchronously. No response body."
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/status": {
+      "get": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Get Project Status",
+        "description": "When invoked, Get Project Status returns current project status and \u2014 if input data errors\r\nwere detected \u2014 error information associated with each input data unit where an error occurred.\r\n            \r\nA project\u2019s state can change due to REST API calls executed by your code, changes made to a project in\r\nthe Enterprise Portal as well as project-related events occurring at Defined.ai.\r\nIt is not guaranteed that project states follow a sequential, ordered progression. \r\n             \r\n| REST API Call Invocation | Project Related Event | Project Status | Invokable REST API Calls |\r\n|:-------------|:-------------|:-------------|:-------------|\r\n| Create Project | Project has been created | NOT ACTIVE | Upload Data Units \n Delete Project |\r\n| Upload Data Units | Defined.ai is running validation | PROCESSING DATA UPLOAD | |\r\n| | Upload to Defined.ai is complete and no errors were detected | UPLOAD SUCCESS | Upload Data Units \n Delete Project |\r\n| | Upload to Defined.ai is complete but Defined.ai found errors in some Input Units | UPLOAD ERRORS | Upload Data Units \n Delete Project |\r\n| | Upload to Defined.ai is complete but no data unit is valid | INSUFFICIENT DATA | Upload Data Units \n Delete Project |\r\n| | Defined.ai is preparing the project before deploying it to our human intelligence community | PREPARING PROJECT | Cancel Project |\r\n| | Defined.ai has deployed the project to our human intelligence community | RUNNING | Cancel Project |\r\n| | Defined.ai is accessing the quality of the human intelligence community | ASSESSING QUALITY | Cancel Project |\r\n| | Defined.ai is curating and preparing the results for download | GENERATING RESULTS | |\r\n| | Defined.ai has completed the project and data is available for download  | PROJECT COMPLETED | Delete Project \n Get Deliverables |\r\n| Cancel Project | Defined.ai has canceled the project | CANCELLED | Delete Project |\r\n| Delete Project | Defined.ai has deleted the project | DELETED | |\r\n\n\r\n             \r\n**Permission Required:** Read Project Properties",
+        "operationId": "Projects_GetProjectStatus",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The ProjectStatus structure.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/cancel": {
+      "put": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Cancel Project",
+        "description": "Cancels a Project that has been Started. When Cancel is invoked, Defined.ai reviews the progress of the\r\nProject being canceled. If a portion of the Project has been completed, the Enterprise customer is charged\r\nfor that portion, and refunded with the credits for the remainder of the uncompleted work.\r\n            \r\n**Permission Required:** Update Project Properties",
+        "operationId": "Projects_CancelProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project cancelled."
+          },
+          "400": {
+            "description": "Project status cannot be switched."
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/delete": {
+      "delete": {
+        "tags": [
+          "Project Management"
+        ],
+        "summary": "Delete Project",
+        "description": "Deletes a Project.  When a Project is deleted, it is no longer available. As a result, if the Project has\r\nbeen completed and there exists project results, we recommend that project results are retrieved prior to\r\ndeletion.\r\n            \r\nQuick tip: Projects can be deleted if they haven't been started, if they were completed, paused or cancelled. \r\n            \r\n**Permission Required:** Delete Project",
+        "operationId": "Projects_DeleteProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project deleted."
+          },
+          "400": {
+            "description": "Project status cannot be switched."
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/jobs": {
+      "get": {
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Get Jobs",
+        "description": "Retrieves a list of job IDs within a specific project. \r\n\r\n**Permission Required:** Read Project Properties",
+        "operationId": "Jobs_GetJobs",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Jobs.GetProjectJobsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Jobs.GetProjectJobsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Jobs.GetProjectJobsResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/jobs/{jobId}": {
+      "put": {
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Edit Job",
+        "description": "The job settings are editable until the first input units are uploaded, which means when the project\r\nstate is still NOT ACTIVE. For instance, change the number of contributors allowed for each input unit. \r\n            \r\n**Permission Required:** Update Project Properties",
+        "operationId": "Jobs_EditJob",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "Job ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. Job is updated asynchronously. No response body."
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project or job does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/inputUnitsSchema": {
+      "get": {
+        "tags": [
+          "Input Units"
+        ],
+        "summary": "Get Input Unit Schema",
+        "description": "The format of the input unit required for the project upload is retrieved. Please note that,\r\nthe endpoint will return an object with required fields and their properties format for each input unit\r\non the desired project. However, when uploading you need to create an array with those required fields,\r\nrespecting their properties. To upload, you should use the [UPLOAD INPUT UNIT](#operation/UploadManagement_UploadInputUnits) endpoint.\r\n            \r\n**Permission Required:** Upload Data",
+        "operationId": "UploadManagement_GetInputUnitSchema",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns hit Upload Schema for the requested project.",
+            "content": {
+              "text/plain": {
+                "schema": {},
+                "example": {
+                  "type": "object",
+                  "required": [
+                    "audioSample",
+                    "sentenceSample"
+                  ],
+                  "properties": {
+                    "audioSample": {
+                      "type": "string",
+                      "format": "uri",
+                      "urlType": "audio",
+                      "examples": [
+                        "http://example.com"
+                      ]
+                    },
+                    "sentenceSample": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "guid"
+                    },
+                    "details": {
+                      "type": "string",
+                      "maxLength": 500,
+                      "examples": [
+                        "This is a sample of details"
+                      ]
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "type": "object",
+                  "required": [
+                    "audioSample",
+                    "sentenceSample"
+                  ],
+                  "properties": {
+                    "audioSample": {
+                      "type": "string",
+                      "format": "uri",
+                      "urlType": "audio",
+                      "examples": [
+                        "http://example.com"
+                      ]
+                    },
+                    "sentenceSample": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "guid"
+                    },
+                    "details": {
+                      "type": "string",
+                      "maxLength": 500,
+                      "examples": [
+                        "This is a sample of details"
+                      ]
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {},
+                "example": {
+                  "type": "object",
+                  "required": [
+                    "audioSample",
+                    "sentenceSample"
+                  ],
+                  "properties": {
+                    "audioSample": {
+                      "type": "string",
+                      "format": "uri",
+                      "urlType": "audio",
+                      "examples": [
+                        "http://example.com"
+                      ]
+                    },
+                    "sentenceSample": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string",
+                      "format": "guid"
+                    },
+                    "details": {
+                      "type": "string",
+                      "maxLength": 500,
+                      "examples": [
+                        "This is a sample of details"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No hit Upload Schema for the requested project."
+          },
+          "400": {
+            "description": "Invalid job configuration."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/inputUnits": {
+      "post": {
+        "tags": [
+          "Input Units"
+        ],
+        "summary": "Upload Input Units",
+        "description": "You can upload input units to the project, which contributors will work on.\r\nMaximum size allowed is 250 MB of data.\r\n            \r\n**How to upload**\r\n            \r\nTo know which properties should be used to upload the input units properly, you should use the\r\n[GET INPUT UNIT SCHEMA](#operation/UploadManagement_GetInputUnitSchema) endpoint.\r\nPlease note that, the endpoint will return an object with required\r\nfields and their properties format for each input unit on the desired project. However, when uploading\r\nyou need to create an array with those required fields, respecting their properties.\r\n            \r\n**Configure your Amazon S3 bucket policy to grant cross-account access to Define.ai**\r\n            \r\nYou can use AWS S3 to store and submit your input units with the file URLs in\r\nS3:// protocol(for example, S3://bucket-name/key-name) rather than http:// or https:// protocol.\r\nConfigure your S3 bucket policy to give permission to the following IAM role for Define.ai\r\nto access your files. \n\r\nTo do this, you must be the S3 bucket owner.\r\nGot to bucket >> permission >> bucket policy, and add the following policy \n\r\n(Note that the place holder ${BucketName} should be replaced by your S3 bucket name)\r\n\n\r\n            \r\n    {\r\n        \"Version\": \"2012-10-17\",\r\n         \"Statement\": [{\r\n                \"Effect\": \"Allow\",\r\n                \"Principal\": {\r\n                    \"AWS\": \"arn:aws:iam::463637393528:user/prod-devteam-user\"\r\n                },\r\n                \"Action\": [\r\n                    \"s3:GetObject\",\r\n                    \"s3:ListBucket\"\r\n                ],\r\n                \"Resource\": [\r\n                    \"arn:aws:s3:::${BucketName}/*\",\r\n                    \"arn:aws:s3:::${BucketName}\"\r\n                ]\r\n        }]\r\n    }\r\n            \r\n\n\r\n**How validation works**\r\n            \r\nTwo validations phases follow the upload operation. First, a synchronous phase and, if completed\r\nsuccessfully, an asynchronous phase. Validation failure will return a list of up to 50 error codes and\r\nmessages to resolve. Review these errors and upload the unsuccessful input units again.\r\n            \r\nThe project state will change to PROCESSING DATA UPLOAD once there are input units passing all syntax and\r\nformat evaluations.\r\n            \r\n**Example of how validation and upload of Input Units work**\r\n            \r\nYou upload 1 000 input units. 100 validation errors are found. Remember the validation returns the\r\nfirst 50 error messages. Review the errors and correct errors for all 100 input units and reload the\r\nset of 100 (not all 1 000). Validation takes place (asynchronous phase), and successful input units are\r\nuploaded to the system.\r\n            \r\n**Understand the project state based on asynchronous validation phase**\r\n            \r\nErrors found will change the project state to either UPLOAD ERRORS or INSUFFICIENT DATA, depending on\r\nwhether there is valid input unit(s). Retrieve the error list by using GET PROJECT ERRORS endpoint.\r\n            \r\nA single valid input unit will change the project state to PROCESSING DATA UPLOAD. Data can be added\r\nuntil the project state changes to PREPARING PROJECT.\r\n            \r\n**Permission Required:** Upload Data",
+        "operationId": "UploadManagement_UploadInputUnits",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "example": [
+                  {
+                    "audioSample": "S3://bucket-name/key-name",
+                    "sentenceSample": "This is a sentence sample.",
+                    "details": "This is a sentence details."
+                  },
+                  {
+                    "audioSample": "https://audio-sample.wav",
+                    "sentenceSample": "This is a sentence sample.",
+                    "details": "This is a sentence details."
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. Job is updated asynchronously.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/errors": {
+      "get": {
+        "tags": [
+          "Input Units"
+        ],
+        "summary": "Get Project Errors",
+        "description": "After the synchronous upload is completed successfully, the asynchronous process is triggered.\r\nValidation errors during this phase will change the project state to either UPLOAD ERRORS or\r\nINSUFFICIENT DATA, depending on whether there is valid input unit(s). A detailed list of errors will be\r\nreturned. Review the error list and re-upload the set using the same Input Unit ID.\r\n            \r\n**List of possible errors:**\r\n| Error Types | Description |\r\n|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|\r\n| ConnectionUnsuccessful | Connection to the URL provider was unsuccessful |\r\n| UrlNotSupported | The provided URL is not formatted over HTTP, HTTPS or S3 protocols |\r\n| FileDoesNotExist\n\n Possible values for errorDetails field:\n\n* NoSuchKey.\n\n* NoSuchBucket. | The provided URL does not contain a file or, if S3 protocol is used, the specified key/bucket does not exist. |\r\n| FileIsNotValid\n\nPossible values for `errorDetails` field:\n\n* .WAV file failed format validations. Check public API documentation or contact Enterprise Support.\n\n* .WAV file failed validation: fmt chunk size must be greater than or equal to 16.\n\n* .WAV file failed validation: bits per sample must be between 4 and 16.\n\n* .WAV file failed validation: PCM audio format is required. \n\n* .WAV file failed validation: number of channels must be between 1 and 8. | The provided URL contains invalid file formats (accepted file formats: audio (.wav)) |\r\n| UnauthorizedAccess | The provided URL cannot be accessed due to authentication issues |\r\n| StatusCodeDoesNotIndicateSuccess\n\nPossible values for `errorDetails` field:\n\n* e.g. 429 TooManyRequests. | Remote server returned an error when queried resource under corresponding URL. Please, see `errorDetails` for actual error code and error message. |\r\n| PlatformError | Something went wrong on our side |\r\n\n\r\n**Sample:**\r\n            \r\n    {\r\n        \"uploadInputUnitsError\":\r\n        [\r\n            {\r\n                \"inputDataUnitId\": \"00000000-0000-0000-0000-000000000000\",\r\n            \r\n                \"errorType\": \"FileIsNotValid\",\r\n            \r\n                \"errorDetails\": \".WAV file failed validation: ChunkSize should always be 16 (PCM format) or greater. \",\r\n            \r\n                \"errorProperty\": {\r\n                    \"inputDataUnitProperty\": \"audioSample\",\r\n            \r\n                    \"inputDataUnitPropertyValue\": \"http://example.com\"\r\n                },\r\n            \r\n                \"inputDataUnit\": { }\r\n            }\r\n        ],\r\n        \"totalCount\": 1\r\n    }\r\n            \r\n\n\r\n**Permission Required:** Read Project Properties",
+        "operationId": "UploadManagement_GetProjectErrors",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "The page to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "uploadId",
+            "in": "query",
+            "description": "ID for a set of uploaded input units.",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list with project information.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/uploads": {
+      "get": {
+        "tags": [
+          "Input Units"
+        ],
+        "summary": "Get Project Uploads",
+        "description": "Retrieve the status of a project\u2019s input unit set. Each set of uploaded input units generate an ID\r\nthat you can use to retrieve the upload status, the number of input units submitted, the successful\r\ninput units, and the error input units.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "UploadManagement_GetProjectUploads",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "The page to retrieve. (0 by default)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "The number of items to retrieve per page.\r\nThe maximum number of items per page allowed is 100. (10 by default).",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list with information about the uploads.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/uploads/{uploadId}": {
+      "get": {
+        "tags": [
+          "Input Units"
+        ],
+        "summary": "Get Project Upload",
+        "description": " Retrieve the status of an input unit set uploaded for a project.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "UploadManagement_GetProjectUpload",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "uploadId",
+            "in": "path",
+            "description": "ID for a set of uploaded input unit.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns upload information.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project or upload does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/deliverables": {
+      "get": {
+        "tags": [
+          "Deliverables"
+        ],
+        "summary": "Get Deliverables",
+        "description": "The function retrieves details, including metadata and the ID, for all available files\r\nof the given project ID.  \r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "ProjectsDeliverables_GetDeliverables",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Type of filter. Valid values: \"createdTimestamp\", \"isPartial\", \"downloadCount\", \"fileName\", \"type\".\r\nPlease note that, it is only possible to use one filter at a time.",
+            "schema": {
+              "type": "string",
+              "default": "createdTimestamp"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "description": "Order of displayed results. Valid values: \"asc\", \"desc\".",
+            "schema": {
+              "type": "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "The page to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The project deliverable type.",
+            "schema": {
+              "enum": [
+                "Classic",
+                "Aggregated",
+                "Flat",
+                "CrowdMetadata"
+              ],
+              "type": "string"
+            },
+            "x-enumNames": [
+              "Classic",
+              "Aggregated",
+              "Flat",
+              "CrowdMetadata"
+            ],
+            "x-enumDescriptions": [
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "name": "isPartial",
+            "in": "query",
+            "description": "Indication of whether the file contains partial result set or complete result set.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters."
+          },
+          "401": {
+            "description": "Invalid Authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/deliverables/{deliverableId}": {
+      "get": {
+        "tags": [
+          "Deliverables"
+        ],
+        "summary": "Get Deliverable Details",
+        "description": "Retrieves a deliverable file with details on what will be provided for each project. \r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "ProjectsDeliverables_GetDeliverablesDetails",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "deliverableId",
+            "in": "path",
+            "description": "Deliverable ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project or deliverable does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/{projectId}/deliverables/{deliverableId}/download": {
+      "get": {
+        "tags": [
+          "Deliverables"
+        ],
+        "summary": "Get Deliverable Download",
+        "description": "Download the project deliverable file.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "ProjectsDeliverables_GetDeliverablesDownload",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          },
+          {
+            "name": "deliverableId",
+            "in": "path",
+            "description": "Deliverable ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. The file is returned."
+          },
+          "401": {
+            "description": "Invalid authentication (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project or deliverable does not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/MeanOpinionScore": {
+      "post": {
+        "tags": [
+          "Mean Opinion Score"
+        ],
+        "summary": "Create Project",
+        "description": "Creates a Mean Opinion Score project with a specific type and respective options.\r\n            \r\n**Permission Required:** Create Projects",
+        "operationId": "MeanOpinionScoreProject_CreateProject",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project was successfully created."
+          },
+          "400": {
+            "description": "Project Options are invalid."
+          },
+          "401": {
+            "description": "User is not authorized (invalid/expired token)."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/MeanOpinionScore/{projectId}/inputUnits": {
+      "post": {
+        "tags": [
+          "Mean Opinion Score"
+        ],
+        "summary": "Upload input units",
+        "description": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nThe uploading of input units is an asynchronous process.\r\nOur API performs a variety of syntax evaluations upon method invocation and will return syntax-type errors\r\nimmediately.\r\nIf the uploaded input units passes syntax evaluations, the Project state will change to PROCESSING DATA UPLOAD.\r\nErrors found during asynchronous processing of the uploaded input units will change the Project state to UPLOAD\r\nERRORS.\r\nTo retrieve the specific errors for each input unit call Get Project Status.\r\n            \r\n**Permission Required:** Upload Data",
+        "operationId": "MeanOpinionScoreProject_UploadProjectInputUnits",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Input Units were successfully added."
+          },
+          "400": {
+            "description": "Not enough data units.\r\nInvalid input parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Project not accepting more input units.\r\nInvalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2.0/public/projects/MeanOpinionScore/{projectId}/resultset": {
+      "get": {
+        "tags": [
+          "Mean Opinion Score"
+        ],
+        "summary": "Get Result Set",
+        "description": "Gets result set for the entire project.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "MeanOpinionScoreProject_GetProjectResultSet",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "URL to the file containing the results of the project.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid page number or items per page count"
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist or results do not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/MeanOpinionScore/{projectId}/clone": {
+      "post": {
+        "tags": [
+          "Mean Opinion Score"
+        ],
+        "summary": "Clone project",
+        "description": "Retrieves the project configuration, then creates a new project with the retrieved configuration.\r\n            \r\n**Permission Required:** Create Projects, Read Project Properties",
+        "operationId": "MeanOpinionScoreProject_CloneProjectConfiguration",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project was successfully cloned."
+          },
+          "400": {
+            "description": "Project Options are invalid."
+          },
+          "401": {
+            "description": "User is not authorized (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project not found."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/PronunciationValidation": {
+      "post": {
+        "tags": [
+          "Pronunciation Validation"
+        ],
+        "summary": "Create Project",
+        "description": "Creates a Pronunciation Validation project with a specific type and respective options.\r\n            \r\n**Permission Required:** Create Projects",
+        "operationId": "PronunciationValidationProject_CreateProject",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project was successfully created."
+          },
+          "400": {
+            "description": "Project Options are invalid."
+          },
+          "401": {
+            "description": "User is not authorized (invalid/expired token)."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/PronunciationValidation/{projectId}/inputUnits": {
+      "post": {
+        "tags": [
+          "Pronunciation Validation"
+        ],
+        "summary": "Upload input units",
+        "description": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nThe uploading of input units is an asynchronous process.\r\nOur API performs a variety of syntax evaluations upon method invocation and will return syntax-type errors\r\nimmediately.\r\nIf the uploaded input units passes syntax evaluations, the Project state will change to PROCESSING DATA UPLOAD.\r\nErrors found during asynchronous processing of the uploaded input units will change the Project state to UPLOAD\r\nERRORS.\r\nTo retrieve the specific errors for each input unit call Get Project Status.\r\n            \r\n**Permission Required:** Upload Data",
+        "operationId": "PronunciationValidationProject_UploadProjectInputUnits",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Input Units were successfully added."
+          },
+          "400": {
+            "description": "Not enough data units.\r\nInvalid input parameters."
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Project not accepting more input units.\r\nInvalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist."
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2.0/public/projects/PronunciationValidation/{projectId}/resultset": {
+      "get": {
+        "tags": [
+          "Pronunciation Validation"
+        ],
+        "summary": "Get Result Set",
+        "description": "Gets result set for the entire project.\r\n            \r\n**Permission Required:** Read Project Properties",
+        "operationId": "PronunciationValidationProject_GetProjectResultSet",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "URL to the file containing the results of the project.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults"
+                },
+                "example": {
+                  "resultsFileUrl": "https://someurl/DC/resultset.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid page number or items per page count"
+          },
+          "401": {
+            "description": "Invalid authentication (project from another enterprise or invalid/expired token)."
+          },
+          "403": {
+            "description": "Invalid Enterprise Subscription."
+          },
+          "404": {
+            "description": "Project does not exist or results do not exist."
+          }
+        }
+      }
+    },
+    "/v2.0/public/projects/PronunciationValidation/{projectId}/clone": {
+      "post": {
+        "tags": [
+          "Pronunciation Validation"
+        ],
+        "summary": "Clone project",
+        "description": "Retrieves the project configuration, then creates a new project with the retrieved configuration.\r\n            \r\n**Permission Required:** Create Projects, Read Project Properties",
+        "operationId": "PronunciationValidationProject_CloneProjectConfiguration",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Project identifier.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "00000000-0000-0000-0000-000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project was successfully cloned."
+          },
+          "400": {
+            "description": "Project Options are invalid."
+          },
+          "401": {
+            "description": "User is not authorized (invalid/expired token)."
+          },
+          "404": {
+            "description": "Project not found."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel": {
+        "title": "JSON object",
+        "required": [
+          "contributorsPerInputUnit"
+        ],
+        "type": "object",
+        "properties": {
+          "contributorsPerInputUnit": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of contributors needed to complete one input unit.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel": {
+        "title": "JSON object",
+        "required": [
+          "projectName"
+        ],
+        "type": "object",
+        "properties": {
+          "projectName": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "description": "New project name."
+          },
+          "desiredDeliveryDate": {
+            "type": "string",
+            "description": "Desired delivery date for new project in UTC format <yyyy-mm-dd>. \r\nIf left as null, no desired delivery date is assigned.",
+            "format": "date",
+            "nullable": true
+          },
+          "targetProjectId": {
+            "type": "string",
+            "description": "New project ID. If left as null, GUID is auto-generated and returned in the response.",
+            "format": "uuid",
+            "nullable": true,
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "metatags": {
+            "title": "JSON object",
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n     { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "targetProjectId": {
+            "type": "string",
+            "description": "New project ID",
+            "format": "uuid",
+            "readOnly": true,
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "projectName": {
+            "type": "string",
+            "description": "If left as null, a name will be generated from the original plus a timestamp.",
+            "nullable": true
+          },
+          "projectId": {
+            "type": "string",
+            "description": "A ID by which new project will be identified.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "ageDistribution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel"
+            },
+            "description": "Age Distribution",
+            "nullable": true
+          },
+          "genderDistribution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel"
+            },
+            "description": "Gender Distribution",
+            "nullable": true
+          },
+          "deviceLocationDistribution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel"
+            },
+            "description": "Device Location Distribution",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Configure the contributors' distribution to meet your requirements.\r\n            \r\n**Disclaimer**\r\n            \r\nThough every effort is made to meet the contributors\u2019 distribution as\r\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\r\nwe need to implement a next-best solution and cannot guarantee a 100%\r\nmatch."
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "target": {
+            "enum": [
+              "Adult",
+              "Senior"
+            ],
+            "type": "string",
+            "description": "There are two age categories in the distribution.\r\nYou can select Adult or Senior with age categories 18 \u2013 64 years\r\nand 65 years and above, respectively.",
+            "x-enumNames": [
+              "Adult",
+              "Senior"
+            ],
+            "x-enumDescriptions": [
+              "",
+              ""
+            ],
+            "x-ms-enum": {
+              "name": "AgeDistributionRange",
+              "modelAsString": true
+            }
+          },
+          "value": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "description": "**Custom distribution**\r\n            \r\nMeans the value is set to greater than 0% but\r\nsmaller than or equal to 100%. Should the total value\r\nbe set to less than 100%, the remaining percentage\r\nis set with the default distribution.\r\n            \r\n**Default distribution**\r\n            \r\nMeans that the values are randomized but comply with\r\nthe job configuration. For example, language settings\r\nare taken into consideration, as well as country and\r\nregion settings. Without any contributors\u2019 distribution\r\nrestriction, whoever is qualified may enter the job.\r\n            \r\n**Examples**\r\n            \r\nJane Doe sets the age distribution to 75% of the participants being\r\nin the Adult category. The remaining 25% will be randomly distributed\r\nbetween the age categories. Therefore, Jane must be aware that some\r\nof the 25% random distribution may also include the Adult category.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Age Distribution"
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "Geolocation technology will give an approximate real-world\r\ngeographic location of the device being used and thus the location\r\nof the contributor using the device.",
+            "nullable": true
+          },
+          "value": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "description": "The value is set to greater than 0% but smaller than or equal to\r\n100%. Should the total value be set to less than 100%, the remaining\r\npercentage will have no constraints.\r\n            \r\n**Example**\r\n            \r\nJane Doe sets the device location distribution to 75% of the\r\nparticipants being in a particular geographic location. The\r\nremaining 25% will be randomly distributed. Therefore, Jane Doe\r\nmust be aware that some of the 25% random distribution may also\r\ninclude the particular geographic location that was set.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Device Location Distribution"
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "target": {
+            "enum": [
+              "Male",
+              "Female"
+            ],
+            "type": "string",
+            "description": "The gender category makes provision for biological sexes female and male.\r\nThough third gender preference are respected as a choice, we would like to\r\nconfirm biological sex of contributors.",
+            "x-enumNames": [
+              "Male",
+              "Female"
+            ],
+            "x-enumDescriptions": [
+              "",
+              ""
+            ],
+            "x-ms-enum": {
+              "name": "GenderDistributionRange",
+              "modelAsString": true
+            }
+          },
+          "value": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "description": "**Custom distribution**\r\n            \r\nMeans the value is set to greater than 0% but\r\nsmaller than or equal to 100%. Should the total value\r\nbe set to less than 100%, the remaining percentage\r\nis set with the default distribution.\r\n            \r\n**Default distribution**\r\n            \r\nMeans that the values are randomized but comply with the job\r\nconfiguration. For example, language settings are taken into\r\nconsideration, as well as country and region settings. Without any\r\ncontributors\u2019 distribution restriction, whoever is qualified may\r\nenter the job.\r\n            \r\n**Example**\r\n            \r\nJohn Doe sets the gender distribution to 75% of the participants\r\nbeing in the Female category. The remaining 25% will be randomly\r\ndistributed between the gender categories. Therefore, John must be\r\naware that some of the 25% random distribution may also include the\r\nFemale category.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Gender Distribution"
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel": {
+        "title": "JSON object",
+        "required": [
+          "languageCode"
+        ],
+        "type": "object",
+        "properties": {
+          "languageCode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code. (e.g. \"en-us\")"
+          },
+          "requireLanguageTest": {
+            "type": "boolean",
+            "description": "If selected, the project requires the contributors to do a language test\r\n(if available for the selected language) to guarantee that they are native speakers.",
+            "default": false,
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Language configurations."
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "title": "JSON object",
+        "required": [
+          "config",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Client generated identifier that will be used as Project Id.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "description": "Project name."
+          },
+          "config": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel"
+              }
+            ],
+            "description": "Json structure with the project configuration."
+          },
+          "metatags": {
+            "title": "JSON object",
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n    { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }",
+            "nullable": true
+          },
+          "desiredDeliveryDate": {
+            "type": "string",
+            "description": "This field is for you to inform DC the desired date for Data to be delivered.",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "title": "JSON object",
+        "required": [
+          "config",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Client generated identifier that will be used as Project Id.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "description": "Project name."
+          },
+          "config": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel"
+              }
+            ],
+            "description": "Json structure with the project configuration."
+          },
+          "metatags": {
+            "title": "JSON object",
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n    { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }",
+            "nullable": true
+          },
+          "desiredDeliveryDate": {
+            "type": "string",
+            "description": "This field is for you to inform DC the desired date for Data to be delivered.",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel": {
+        "title": "JSON object",
+        "required": [
+          "languageConfiguration"
+        ],
+        "type": "object",
+        "properties": {
+          "contributorsDistribution": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel"
+              }
+            ],
+            "description": "Configure the contributors' distribution to meet your requirements.\r\n            \r\n**Disclaimer**\r\n            \r\nThough every effort is made to meet the contributors\u2019 distribution as\r\nconfigured, sometimes, due to factors beyond the control of Defined.ai,\r\nwe need to implement a next-best solution and cannot guarantee a 100%\r\nmatch.",
+            "nullable": true
+          },
+          "languageConfiguration": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel"
+              }
+            ],
+            "description": "Language configuration"
+          },
+          "contributorsPerInputUnit": {
+            "maximum": 5000,
+            "minimum": 5,
+            "type": "integer",
+            "description": "ContributorsPerInputUnit determines how many contributors you would like to process that input unit.\r\nThis will allow you to compare executions of the same input unit.",
+            "format": "int32",
+            "default": 15,
+            "nullable": true
+          },
+          "showDataDisclaimer": {
+            "type": "boolean",
+            "description": "Displays a disclaimer to specify that inputs are \"Not Customer Data\" (displayed within task U.I.)",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "description": "Mean Opinion Score testing settings"
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel": {
+        "title": "JSON object",
+        "required": [
+          "meanOpinionScore"
+        ],
+        "type": "object",
+        "properties": {
+          "meanOpinionScore": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel"
+              }
+            ],
+            "description": "Mean Opinion Score settings."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Json structure with the project configuration."
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel": {
+        "title": "JSON object",
+        "required": [
+          "languageConfiguration"
+        ],
+        "type": "object",
+        "properties": {
+          "contributorsDistribution": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel"
+              }
+            ],
+            "description": "Configure the contributors' distribution to meet your requirements.\r\n            \r\n**Disclaimer**\r\n            \r\nThough every effort is made to meet the contributors\u2019 distribution as\r\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\r\nwe need to implement a next-best solution and cannot guarantee a 100%\r\nmatch.",
+            "nullable": true
+          },
+          "languageConfiguration": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel"
+              }
+            ],
+            "description": "Language configuration"
+          },
+          "contributorsPerInputUnit": {
+            "maximum": 5000,
+            "minimum": 2,
+            "type": "integer",
+            "description": "ContributorsPerInputUnit determines how many contributors you would like to process that input unit.\r\nThis will allow you to compare executions of the same input",
+            "format": "int32",
+            "default": 3,
+            "nullable": true
+          },
+          "showDataDisclaimer": {
+            "type": "boolean",
+            "description": "Displays a disclaimer to specify that inputs are \"Not Customer Data\" (displayed within task U.I.)",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "description": "Pronunciation Validation settings"
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel": {
+        "title": "JSON object",
+        "required": [
+          "pronunciationValidation"
+        ],
+        "type": "object",
+        "properties": {
+          "pronunciationValidation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel"
+              }
+            ],
+            "description": "Pronunciation Validation settings."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Json structure with the project configuration."
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel": {
+        "title": "JSON object",
+        "required": [
+          "desiredDeliveryDate",
+          "metatags",
+          "projectName"
+        ],
+        "type": "object",
+        "properties": {
+          "projectName": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "description": "Name of project."
+          },
+          "desiredDeliveryDate": {
+            "type": "string",
+            "description": "Desired date of delivery for project in UTC format <yyyy-mm-dd>. If left as null, no desired delivery date is assigned.",
+            "format": "date",
+            "nullable": true
+          },
+          "metatags": {
+            "title": "JSON object",
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\r\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\r\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\r\n\r\n If left as null, no metatags are assigned.\r\n \r\n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n  \r\n Below is an example on how to use metatags:\r\n \r\n     { \r\n         \"rootString\":  \"This is a string\",\r\n         \"rootObject\":  {\r\n \t\t\t\"innerBoolean\": true,\r\n \t\t\t\"innerNumber\": 1,\r\n \t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\t\"innerNull\": null,\r\n \t\t\t\"innerObject\": {\r\n \t\t\t\t},\r\n \t\t\t\"innerArray\": []\r\n \t\t},\r\n         \"rootArray\": [1, 2, 3, 4]\r\n     }",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel": {
+        "title": "JSON object",
+        "required": [
+          "audioFileUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "audioFileUrl": {
+            "type": "string",
+            "description": "URL to the audio file that is going to be listened by the contributors.",
+            "format": "uri"
+          },
+          "id": {
+            "type": "string",
+            "description": "Client generated identifier that will be used as InputUnit Id.",
+            "format": "uuid",
+            "nullable": true,
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "details": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "Client generated additional meta-data. An optional string with at most 500 characters.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel": {
+        "title": "JSON object",
+        "required": [
+          "audioFileUrl",
+          "sentence"
+        ],
+        "type": "object",
+        "properties": {
+          "sentence": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Sentence to be presented to the contributors."
+          },
+          "audioFileUrl": {
+            "type": "string",
+            "description": "URL to the audio file that is going to be listened by the contributors.",
+            "format": "uri"
+          },
+          "id": {
+            "type": "string",
+            "description": "Client generated identifier that will be used as InputUnit Id.",
+            "format": "uuid",
+            "nullable": true,
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "details": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "Client generated additional meta-data. An optional string with at most 500 characters.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "title": "JSON object",
+        "required": [
+          "inputUnitDetails"
+        ],
+        "type": "object",
+        "properties": {
+          "inputUnitDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel"
+            },
+            "description": "List of input units."
+          },
+          "autoStartOnUploadSuccess": {
+            "type": "boolean",
+            "description": "Your project will automatically start once all data input units\r\nwere successfully uploaded and the project status is UPLOAD SUCCESS",
+            "default": false,
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "title": "JSON object",
+        "required": [
+          "inputUnitDetails"
+        ],
+        "type": "object",
+        "properties": {
+          "inputUnitDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel"
+            },
+            "description": "List of input units."
+          },
+          "autoStartOnUploadSuccess": {
+            "type": "boolean",
+            "description": "Your project will automatically start once all data input units\r\nwere successfully uploaded and the project status is UPLOAD SUCCESS",
+            "default": false,
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Models.Subscriptions.SubscriptionViewModel": {
+        "title": "JSON object",
+        "required": [
+          "emailListConsent",
+          "to",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of main recipients of the email addresses [1-10]."
+          },
+          "emailListConsent": {
+            "type": "boolean",
+            "description": "By setting this flag to True the user acknowledges that it has obtained all necessary valid consents from\r\nthe relevant data subjects (email owners) to subscribe, on their behalf, each respective email address to\r\nthis notification service, in compliance with the applicable data protection laws, and in agreement with\r\nDefined.ai's service <a href=\"https://www.defined.ai/terms-of-use\">Terms of Use</a>\r\nand <a href=\"https://www.defined.ai/privacy-policy\">Privacy Policy</a>."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "resultsFileUrl": {
+            "type": "string",
+            "description": "URL to the file containing the results of the project.",
+            "format": "uri",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Jobs.GetProjectJobsResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Jobs.Job"
+            },
+            "description": "List of jobs within a specific project",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Jobs.Job": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Job identifier.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "contributorsPerInputUnit": {
+            "type": "integer",
+            "description": "Number of contributors needed to complete one input unit.",
+            "format": "int32"
+          },
+          "languageCode": {
+            "type": "string",
+            "description": "Language code configured. (e.g. \"en-us\")",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.LanguageInfo"
+            },
+            "description": "List of supported languages.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Languages.LanguageInfo": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "description": "Language name.",
+            "nullable": true
+          },
+          "languageCode": {
+            "type": "string",
+            "description": "Language code.",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "description": "Country name.",
+            "nullable": true
+          },
+          "nativeSpeakerSupported": {
+            "type": "boolean",
+            "description": "Support for sourcing of native speakers."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "inputDataUnitProperty": {
+            "type": "string",
+            "description": "Name of property for which error exists.",
+            "nullable": true
+          },
+          "inputDataUnitPropertyValue": {
+            "type": "string",
+            "description": "Original value of the property for which error exists.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "uploadInputUnitsError": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError"
+            },
+            "description": "List of errors in the data unit uploading asynchronous process.",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total number of items available.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo"
+            },
+            "description": "A page with details from several projects.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project ID.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "projectName": {
+            "type": "string",
+            "description": "Name of the project.",
+            "nullable": true
+          },
+          "dateTimeCreated": {
+            "type": "string",
+            "description": "Date and time when the project was created in UTC format.",
+            "format": "date-time"
+          },
+          "desiredDeliveryDate": {
+            "type": "string",
+            "description": "Desired delivery date and time for new project in UTC format.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "The project's current status.",
+            "nullable": true
+          },
+          "metatags": {
+            "title": "JSON object",
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": "Metatags provide for the ability to assign metadata to projects in the form of key-value pairs. Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria for administrative purposes. Defined.ai does not perform any actions on metatags that customers submit.\r\n\r\nThe root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\r\n\r\nBelow is an example of  a set of metatags:\r\n\r\n    { \r\n        \"rootString\":  \"This is a string\",\r\n        \"rootObject\":  {\r\n\t\t\t\"innerBoolean\": true,\r\n\t\t\t\"innerNumber\": 1,\r\n\t\t\t\"innerString\": \"This is another string\",\r\n\t\t\t\"innerNull\": null,\r\n\t\t\t\"innerObject\": {\r\n\t\t\t\t},\r\n\t\t\t\"innerArray\": []\r\n\t\t},\r\n        \"rootArray\": [1, 2, 3, 4]\r\n    }",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "projectDetails": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails"
+              }
+            ],
+            "description": "Details from a specific project.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Project Identifier.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the project.",
+            "nullable": true
+          },
+          "projectType": {
+            "type": "string",
+            "description": "Code that identifies a project template type",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "The project's current status.",
+            "nullable": true
+          },
+          "dateTimeCreated": {
+            "type": "string",
+            "description": "Date and time when the project was created.",
+            "format": "date-time"
+          },
+          "dateTimeLastRun": {
+            "type": "string",
+            "description": "Date and time when the project last ran.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Reflects the progress of execution of a specific project.\r\n            \r\nThis value is subject to changes. The progress might decrease as the latest collected data is still subject to quality validations.",
+            "format": "int32"
+          },
+          "estimatedDateToComplete": {
+            "type": "string",
+            "description": "A projection of the project completion date.\r\n            \r\nThis is not a committed date. The date is a projection based on the average speed at which data is collected and may vary.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalNumberInputUnitsSubmitted": {
+            "type": "integer",
+            "description": "Total number of input units submitted for the project.",
+            "format": "int32"
+          },
+          "totalNumberOutputUnitsCompleted": {
+            "type": "integer",
+            "description": "Number of data units already completed.",
+            "format": "int32"
+          },
+          "targetNumberOutputDataUnits": {
+            "type": "integer",
+            "description": "Number of target data units.",
+            "format": "int32"
+          },
+          "uploadInputUnitsError": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError"
+            },
+            "description": "List of errors in the data unit uploading asynchronous process.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Project Identifier.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the project.",
+            "nullable": true
+          },
+          "projectType": {
+            "type": "string",
+            "description": "Code that identifies a project template type",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "The project's current status.",
+            "nullable": true
+          },
+          "dateTimeCreated": {
+            "type": "string",
+            "description": "Date and time when the project was created.",
+            "format": "date-time"
+          },
+          "dateTimeLastRun": {
+            "type": "string",
+            "description": "Date and time when the project last ran.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalNumberInputUnitsSubmitted": {
+            "type": "integer",
+            "description": "Total number of input units submitted for the project.",
+            "format": "int32"
+          },
+          "totalNumberOutputUnitsCompleted": {
+            "type": "integer",
+            "description": "Total number of data units already completed.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "inputDataUnitId": {
+            "type": "string",
+            "description": "Unique identifier of the input data unit where the error occurred.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "errorType": {
+            "enum": [
+              "connectionUnsuccessful",
+              "fileDoesNotExist",
+              "fileIsNotValid",
+              "unauthorizedAccess",
+              "statusCodeDoesNotIndicateSuccess",
+              "platformError",
+              "urlNotSupported"
+            ],
+            "type": "string",
+            "description": "Type of error.",
+            "x-enumNames": [
+              "ConnectionUnsuccessful",
+              "FileDoesNotExist",
+              "FileIsNotValid",
+              "UnauthorizedAccess",
+              "StatusCodeDoesNotIndicateSuccess",
+              "PlatformError",
+              "UrlNotSupported"
+            ],
+            "x-enumDescriptions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "x-ms-enum": {
+              "name": "FileUploadErrorMessage",
+              "modelAsString": true
+            }
+          },
+          "errorDetails": {
+            "type": "string",
+            "description": "Details of error.",
+            "nullable": true
+          },
+          "errorProperty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty"
+              }
+            ],
+            "nullable": true
+          },
+          "inputDataUnit": {
+            "description": "Fields of the original uploaded input unit.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.GetPagedProjectDeliverables": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable"
+            },
+            "description": "List of deliverables",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total number of items available.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.ProjectDeliverables.ProjectDeliverable": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project ID.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "deliverableId": {
+            "type": "string",
+            "description": "Deliverable ID within a project.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "type": {
+            "type": "string",
+            "description": "\n**Classic**</br> is a standard JSON format generated by our API.  \r\n            \n**Aggregated**</br> is a format that combines results for all responses at the task level.\r\n            \n**Flat**</br> is a result file at the response level.  \r\n            \n**CrowdMetadata**</br> contains information about the contributors that are relevant to their results.",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Name of the result file.",
+            "nullable": true
+          },
+          "createdTimestamp": {
+            "type": "string",
+            "description": "Date and timestamp of when the file was created.",
+            "format": "date-time"
+          },
+          "isPartial": {
+            "type": "boolean",
+            "description": "Indication of whether the file contains partial result set or complete result set."
+          },
+          "downloadCount": {
+            "type": "integer",
+            "description": "Number of times file was downloaded.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "DeliverablePublished",
+              "DataUploadCompleted"
+            ],
+            "type": "string",
+            "description": "Type of notifications.",
+            "x-enumNames": [
+              "DeliverablePublished",
+              "DataUploadCompleted"
+            ],
+            "x-enumDescriptions": [
+              "",
+              ""
+            ],
+            "x-ms-enum": {
+              "name": "NotificationType",
+              "modelAsString": true
+            }
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of main recipients of the email addresses [1-10]",
+            "nullable": true
+          },
+          "emailListConsent": {
+            "type": "boolean",
+            "description": "When this flag is True the user acknowledges that it has obtained all necessary valid consents\r\nfrom the relevant data subjects (email owners) to subscribe, on their behalf, each respective email address\r\nto this notification service, in compliance with the applicable data protection laws, and in agreement with\r\nDefined.ai's service <a href=\"https://www.defined.ai/terms-of-use\">Terms of Use</a>\r\nand <a href=\"https://www.defined.ai/privacy-policy\">Privacy Policy</a>."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult"
+            },
+            "description": "List of subscriptions.",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total number of items available.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Upload.Dtos.InputDataUnitsStatsResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "submitted": {
+            "type": "integer",
+            "description": "Number of input units submitted.",
+            "format": "int32"
+          },
+          "success": {
+            "type": "integer",
+            "description": "Number of input units uploaded successfully.",
+            "format": "int32"
+          },
+          "error": {
+            "type": "integer",
+            "description": "Number of input units with errors.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "description": "ID for a set of uploaded input units.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "description": "ID for a set of uploaded input units.",
+            "format": "uuid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "inputDataUnitsStats": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.Dtos.InputDataUnitsStatsResult"
+              }
+            ],
+            "description": "Upload statistics.",
+            "nullable": true
+          },
+          "isUploading": {
+            "type": "boolean",
+            "description": "Indication if the upload is still ongoing or not."
+          },
+          "uploadStartTimestamp": {
+            "type": "string",
+            "description": "Date and timestamp of when the upload started.",
+            "format": "date-time"
+          },
+          "uploadEndTimestamp": {
+            "type": "string",
+            "description": "Date and timestamp of when the upload ended.",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult": {
+        "title": "JSON object",
+        "type": "object",
+        "properties": {
+          "uploads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult"
+            },
+            "description": "Details from project\u2019s input unit sets.",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total number of items available.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Please enter into field the word 'Bearer' following by space and JWT",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Jobs",
+      "description": "Jobs are how your data (input units) connects the project with our contributors. Each job has data, instructions, and customizable parameters, which then convert inputs to outputs. Parameters are customizable according to your project needs."
+    },
+    {
+      "name": "Supported Languages",
+      "description": "Several of the Workflow Templates offer the ability to set a language / country code. These configurations instruct Defined.ai to use our human intelligence Contributors that speak and / or reside in the specified language / country. The REST API provides a method called \u201cGet Supported Languages\u201d that returns the set of languages, language features and associated language codes that are used by our APIs and supported by the Defined.ai platform. "
+    },
+    {
+      "name": "Mean Opinion Score",
+      "description": "Aggregate ratings on the \"intelligibility\" and \"naturalness\" of utterances."
+    },
+    {
+      "name": "Project Management",
+      "description": "Informally, projects can be viewed as configurable packages that process sets of Input Units. The project\u2019s template determines how the Input Units are processed. Projects can be retrieved and managed as needed through the following methods:"
+    },
+    {
+      "name": "Deliverables",
+      "description": "The result file is created after the project is completed and is referred to as deliverables. The file contains contributor metadata for completed input units."
+    },
+    {
+      "name": "Pronunciation Validation",
+      "description": "Confirm audio meets pronunciation standards."
+    },
+    {
+      "name": "Subscriptions",
+      "description": "Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project.\n\n <small> By using this service, the user fully agrees with Defined.ai's service <a href=\"https://www.defined.ai/terms-of-use/\">Terms of Use</a>, and acknowledges and understands that any processing of personal data will be carried out according to the terms of Defined.ai's <a href=\"https://www.defined.ai/privacy-policy/\">Privacy Policy</a>. The user further acknowledges that it is fully responsible for obtaining and managing all necessary valid consents from all data subjects whose email address is being subscribed by the user, for the sole purposes of receiving service notifications in context of Defined.ai provided services, in compliance with all applicable data protection laws, including the EU General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA). The user also acknowledges that it is fully responsible for unsubscribing such emails once no longer necessary for these purposes or in case the data subject has removed its consent.\n\n Defined.ai reserves the right to proceed with the immediate service suspension without any prior notice, if it detects service abuse, non-compliance with the above obligations or in case it receives complaints from data subjects that have not provided their consent for the subscription of their email. </small>"
+    },
+    {
+      "name": "Input Units",
+      "description": "Each input unit is a single component of work done by the contributors. There are several types of units \u2013 audio, text, and image. In a given project, all units should have the same structure. The input unit schema explains the structure of input units. \n\n Note: Input Units are a part of projects. They are not separate entities. "
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": " ",
+      "tags": [
+        "Supported Languages"
+      ]
+    },
+    {
+      "name": "Project life cycle",
+      "tags": [
+        "Project Management",
+        "Subscriptions",
+        "Jobs",
+        "Input Units",
+        "Deliverables"
+      ]
+    },
+    {
+      "name": "Speech Technologies",
+      "tags": [
+        "Mean Opinion Score",
+        "Pronunciation Validation"
+      ]
+    }
+  ]
+}

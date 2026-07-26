@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: https://defined.ai/
+docs: https://defined.ai/about-us
+standards:
+- id: oauth2
+  conforms: false
+  evidence: securityScheme is apiKey (Bearer JWT in Authorization header), not an oauth2 flow.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Error responses use plain HTTP status codes, not application/problem+json.
+- id: iso-27001
+  conforms: true
+  evidence: Defined.ai publicly states ISO 27001 certification (llms.txt / about-us).
+- id: iso-27701
+  conforms: true
+  evidence: Defined.ai publicly states ISO 27701 (privacy information management) certification.
+- id: iso-42001
+  conforms: true
+  evidence: Defined.ai publicly states ISO 42001 (AI management system) certification.
+- id: gdpr
+  conforms: true
+  evidence: Defined.ai publicly states GDPR compliance.
+- id: hipaa
+  conforms: true
+  evidence: Defined.ai publicly states HIPAA compliance.

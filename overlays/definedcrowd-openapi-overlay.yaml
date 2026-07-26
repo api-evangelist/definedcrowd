@@ -1,0 +1,18 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Defined.ai Public API
+  version: 1.0.0
+extends: openapi/definedcrowd-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: definedcrowd
+    x-apievangelist-category: ai-training-data
+    x-apievangelist-auth: bearer-jwt
+    x-apievangelist-pagination: page-number
+- target: $.info
+  update:
+    x-apievangelist-links:
+      developerPortal: https://developers.definedcrowd.com/
+      documentation: https://developers.definedcrowd.com/
+      llmsTxt: https://defined.ai/llms.txt
