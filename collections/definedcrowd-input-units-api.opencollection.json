@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Input Units API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Input Units",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Input Unit Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/inputUnitsSchema",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ]
+          },
+          "docs": "The format of the input unit required for the project upload is retrieved. Please note that,\r\nthe endpoint will return an object with required fields and their properties format for each input unit\r\non the desired project. However, when uploading you need to create an array with those required fields,\r\nrespecting their properties. To upload, you should use the [UPLOAD INPUT UNIT](#operation/UploadManagement_UploadInputUnits) endpoint.\r\n            \r\n**Permission Required:** Upload Data"
+        },
+        {
+          "info": {
+            "name": "Upload Input Units",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/inputUnits",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "You can upload input units to the project, which contributors will work on.\r\nMaximum size allowed is 250 MB of data.\r\n            \r\n**How to upload**\r\n            \r\nTo know which properties should be used to upload the input units properly, you should use the\r\n[GET INPUT UNIT SCHEMA](#operation/UploadManagement_GetInputUnitSchema) endpoint.\r\nPlease note that, the endpoint will return an object with required\r\nfields and their properties format for each input unit on the desired project. However, "
+        },
+        {
+          "info": {
+            "name": "Get Project Errors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/errors",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "The page to retrieve."
+              },
+              {
+                "name": "itemsPerPage",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100."
+              },
+              {
+                "name": "uploadId",
+                "value": "",
+                "type": "query",
+                "description": "ID for a set of uploaded input units."
+              }
+            ]
+          },
+          "docs": "After the synchronous upload is completed successfully, the asynchronous process is triggered.\r\nValidation errors during this phase will change the project state to either UPLOAD ERRORS or\r\nINSUFFICIENT DATA, depending on whether there is valid input unit(s). A detailed list of errors will be\r\nreturned. Review the error list and re-upload the set using the same Input Unit ID.\r\n            \r\n**List of possible errors:**\r\n| Error Types | Description |\r\n|----------------------------------|---------"
+        },
+        {
+          "info": {
+            "name": "Get Project Uploads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/uploads",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "The page to retrieve. (0 by default)"
+              },
+              {
+                "name": "itemsPerPage",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to retrieve per page.\r\nThe maximum number of items per page allowed is 100. (10 by default)."
+              }
+            ]
+          },
+          "docs": "Retrieve the status of a project’s input unit set. Each set of uploaded input units generate an ID\r\nthat you can use to retrieve the upload status, the number of input units submitted, the successful\r\ninput units, and the error input units.\r\n            \r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Get Project Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/uploads/:uploadId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "uploadId",
+                "value": "",
+                "type": "path",
+                "description": "ID for a set of uploaded input unit."
+              }
+            ]
+          },
+          "docs": " Retrieve the status of an input unit set uploaded for a project.\r\n            \r\n**Permission Required:** Read Project Properties"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

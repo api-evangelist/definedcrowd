@@ -1,0 +1,1212 @@
+{
+  "item": [
+    {
+      "id": "50050ec9-02ff-4ffa-a93b-8fb24a2e6cac",
+      "name": "Mean Opinion Score",
+      "description": {
+        "content": "Aggregate ratings on the \"intelligibility\" and \"naturalness\" of utterances.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a666a0c4-e8fe-4dc1-81f9-8e0e927e40cd",
+          "name": "Create Project",
+          "request": {
+            "name": "Create Project",
+            "description": {
+              "content": "Creates a Mean Opinion Score project with a specific type and respective options.\r\n            \r\n**Permission Required:** Create Projects",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                "MeanOpinionScore"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"meanOpinionScore\": {\n      \"languageConfiguration\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsDistribution\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsPerInputUnit\": 15,\n      \"showDataDisclaimer\": false\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"metatags\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"desiredDeliveryDate\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fa9a33a4-55a3-4284-b860-ab0e28997f4f",
+              "name": "Project was successfully created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"meanOpinionScore\": {\n      \"languageConfiguration\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsDistribution\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsPerInputUnit\": 15,\n      \"showDataDisclaimer\": false\n    }\n  },\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"<string>\",\n  \"metatags\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"desiredDeliveryDate\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9f14636d-ac08-4270-b436-6fe5303b3710",
+              "name": "Project Options are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"meanOpinionScore\": {\n      \"languageConfiguration\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsDistribution\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsPerInputUnit\": 15,\n      \"showDataDisclaimer\": false\n    }\n  },\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"<string>\",\n  \"metatags\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"desiredDeliveryDate\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c4083792-85c3-4527-9f19-31d0725c742e",
+              "name": "User is not authorized (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"meanOpinionScore\": {\n      \"languageConfiguration\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsDistribution\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"contributorsPerInputUnit\": 15,\n      \"showDataDisclaimer\": false\n    }\n  },\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"<string>\",\n  \"metatags\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"desiredDeliveryDate\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6e287ae7-e4db-42dd-969a-0b6bdc55d02e",
+          "name": "Upload input units",
+          "request": {
+            "name": "Upload input units",
+            "description": {
+              "content": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nThe uploading of input units is an asynchronous process.\r\nOur API performs a variety of syntax evaluations upon method invocation and will return syntax-type errors\r\nimmediately.\r\nIf the uploaded input units passes syntax evaluations, the Project state will change to PROCESSING DATA UPLOAD.\r\nErrors found during asynchronous processing of the uploaded input units will change the Project state to UPLOAD\r\nERRORS.\r\nTo retrieve the specific errors for each input unit call Get Project Status.\r\n            \r\n**Permission Required:** Upload Data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                "MeanOpinionScore",
+                ":projectId",
+                "inputUnits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"<uuid>\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"<uuid>\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c7be1c10-cc27-4432-9f72-f6a9c08ddb48",
+              "name": "Input Units were successfully added.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7b0587af-1b9e-4049-ae3e-cf98dc37f387",
+              "name": "Not enough data units.\r\nInvalid input parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "adbaab11-0694-4be4-a3cf-e8a056a31a66",
+              "name": "Invalid authentication (project from another enterprise or invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b73d9f04-8b54-4a35-b994-8f0d5aa52531",
+              "name": "Project not accepting more input units.\r\nInvalid Enterprise Subscription.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1433a0ef-cf24-406b-8df7-31a87411a999",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputUnitDetails\": [\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    },\n    {\n      \"audioFileUrl\": \"<uri>\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"details\": \"<string>\"\n    }\n  ],\n  \"autoStartOnUploadSuccess\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "35e70d9a-5f7a-4a55-8b7e-538247d3e129",
+          "name": "Get Result Set",
+          "request": {
+            "name": "Get Result Set",
+            "description": {
+              "content": "Gets result set for the entire project.\r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                "MeanOpinionScore",
+                ":projectId",
+                "resultset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12283ce1-dfef-44c8-904c-4265d6497bfa",
+              "name": "URL to the file containing the results of the project.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "resultset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"resultsFileUrl\": \"https://someurl/DC/resultset.json\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "719ecb7b-bb01-42e7-9150-a00d39b66199",
+              "name": "Invalid page number or items per page count",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "resultset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e8fd13b1-dff2-4595-befd-b657c8059c27",
+              "name": "Invalid authentication (project from another enterprise or invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "resultset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4e958440-c56f-4546-b8eb-05f6c8c5a9f9",
+              "name": "Invalid Enterprise Subscription.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "resultset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1f905bf3-de98-4e75-8dff-05311ef74208",
+              "name": "Project does not exist or results do not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "resultset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11afc44e-eecd-4c39-a11e-58075d4ef4a3",
+          "name": "Clone project",
+          "request": {
+            "name": "Clone project",
+            "description": {
+              "content": "Retrieves the project configuration, then creates a new project with the retrieved configuration.\r\n            \r\n**Permission Required:** Create Projects, Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                "MeanOpinionScore",
+                ":projectId",
+                "clone"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectName\": \"<string>\",\n  \"projectId\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "252409b9-a7bf-462c-a586-77f871ec5dae",
+              "name": "Project was successfully cloned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectName\": \"<string>\",\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cd9da685-98bf-4a4f-9ed0-e507fda3edb3",
+              "name": "Project Options are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectName\": \"<string>\",\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "257a0020-4f44-4d0b-b3d4-934c55adf315",
+              "name": "User is not authorized (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectName\": \"<string>\",\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "07eaa4f9-79c8-4983-89aa-e5f1dcecf8ee",
+              "name": "Project not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    "MeanOpinionScore",
+                    ":projectId",
+                    "clone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectName\": \"<string>\",\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "74a89d74-0799-4c99-bcbf-359d6cfd0a92",
+    "name": "Defined.ai Deliverables Mean Opinion Score API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+      "type": "text/plain"
+    }
+  }
+}

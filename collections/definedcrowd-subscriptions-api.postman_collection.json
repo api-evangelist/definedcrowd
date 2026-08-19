@@ -1,0 +1,889 @@
+{
+  "item": [
+    {
+      "id": "7aaf9099-899a-4368-b4ac-3c2cddafa2e2",
+      "name": "Subscriptions",
+      "description": {
+        "content": "Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project.\n\n <small> By using this service, the user fully agrees with Defined.ai's service <a href=\"https://www.defined.ai/terms-of-use/\">Terms of Use</a>, and acknowledges and understands that any processing of personal data will be carried out according to the terms of Defined.ai's <a href=\"https://www.defined.ai/privacy-policy/\">Privacy Policy</a>. The user further acknowledges that it is fully responsible for obtaining and managing all necessary valid consents from all data subjects whose email address is being subscribed by the user, for the sole purposes of receiving service notifications in context of Defined.ai provided services, in compliance with all applicable data protection laws, including the EU General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA). The user also acknowledges that it is fully responsible for unsubscribing such emails once no longer necessary for these purposes or in case the data subject has removed its consent.\n\n Defined.ai reserves the right to proceed with the immediate service suspension without any prior notice, if it detects service abuse, non-compliance with the above obligations or in case it receives complaints from data subjects that have not provided their consent for the subscription of their email. </small>",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c7a85f7e-79c0-4078-a163-cc139ecedeaf",
+          "name": "Put Subscriptions",
+          "request": {
+            "name": "Put Subscriptions",
+            "description": {
+              "content": "Subscribe or edit the list of email addresses that receive the notifications.\r\nCurrently, the following types of events are available for subscription:\r\n            \r\n**Data Upload Completed:** Receive a notification when an upload of data for the project\r\nis completed, including information if any errors were found. The email is only sent after\r\nthe asynchronous part of the upload is finished. Note that you will receive an email per each\r\ninput unit set uploaded. You can know more\r\nin <a href=\"#tag/Input-Units\">data upload section</a>.\r\n            \r\n**Deliverable Published:** Receive a notification when a new result file for the project is available to\r\ndownload. You can know more in the\r\n<a href=\"#tag/Deliverables\">deliverables section</a>.\r\n            \r\n**Permissions:** Update Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f05e25e1-455c-4b0f-9278-d177d69fa188",
+              "name": "Accepted. Subscription will be configured asynchronously.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f9d186c9-d569-4c0f-8dff-c19e9015c9a9",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b60a2b92-aec6-4c22-a456-8370c899a6cd",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "28cad1e6-9f43-40a9-8b93-33c87b3147a0",
+              "name": "Email consent is missing (or invalid), subscription can’t be done without email consent.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "603ad70d-fbb4-4e85-aef9-ec169ac5ed34",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  {\n    \"emailListConsent\": \"<boolean>\",\n    \"to\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1ae0fe6-33ec-4dbf-b49b-0619b5e123c5",
+          "name": "Get Subscriptions",
+          "request": {
+            "name": "Get Subscriptions",
+            "description": {
+              "content": "Retrieves a list of subscribed notifications within a specific project.\r\n            \r\n**Permissions:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3ce85bac-fb6d-4f7a-ae75-1f03c590f0c8",
+              "name": "OK. Returns a list with project subscriptions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subscriptions\": [\n    {\n      \"type\": \"DataUploadCompleted\",\n      \"to\": [\n        \"string\",\n        \"string\"\n      ],\n      \"emailListConsent\": true\n    },\n    {\n      \"type\": \"DeliverablePublished\",\n      \"to\": [\n        \"string\",\n        \"string\"\n      ],\n      \"emailListConsent\": true\n    }\n  ],\n  \"totalCount\": 3242\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8da98813-8ca2-4c7e-bb8b-ca646472458f",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1be1006d-59ca-4aea-94fa-0b726a41cce6",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53588732-1417-489b-b1c5-235cc1aea83c",
+          "name": "Delete Subscription",
+          "request": {
+            "name": "Delete Subscription",
+            "description": {
+              "content": "Allows to unsubscribe each of the existing notifications. \r\n             \r\n**Permissions**: Update Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "subscriptions",
+                ":type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "type",
+                  "description": "(Required) Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e0d9793a-8ca2-4cb8-9a09-1a98487cac01",
+              "name": "Accepted. Subscription will be deleted asynchronously.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions",
+                    ":type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1152e494-9984-4163-bc22-3dd2fbed690d",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions",
+                    ":type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1183b2a5-3cfe-4b4e-930b-cbd4f061c5b4",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions",
+                    ":type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d1518c3-7a57-4727-a03a-7808b222a7bf",
+              "name": "Project does not exist / Subscription type is not configured.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "subscriptions",
+                    ":type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d8783937-2f6a-40e6-ad50-6b858cc2e9a6",
+    "name": "Defined.ai Deliverables Subscriptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+      "type": "text/plain"
+    }
+  }
+}

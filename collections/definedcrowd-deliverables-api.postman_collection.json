@@ -1,0 +1,907 @@
+{
+  "item": [
+    {
+      "id": "ba77ae79-5c58-465e-82ed-dfd7aff6a354",
+      "name": "Deliverables",
+      "description": {
+        "content": "The result file is created after the project is completed and is referred to as deliverables. The file contains contributor metadata for completed input units.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fcc113a1-e6d3-4b9a-aea8-3041be7df49f",
+          "name": "Get Deliverables",
+          "request": {
+            "name": "Get Deliverables",
+            "description": {
+              "content": "The function retrieves details, including metadata and the ID, for all available files\r\nof the given project ID.  \r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "deliverables"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "createdTimestamp",
+                  "description": "Type of filter. Valid values: \"createdTimestamp\", \"isPartial\", \"downloadCount\", \"fileName\", \"type\".\r\nPlease note that, it is only possible to use one filter at a time."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "desc",
+                  "description": "Order of displayed results. Valid values: \"asc\", \"desc\"."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "0",
+                  "description": "The page to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "itemsPerPage",
+                  "value": "10",
+                  "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "The project deliverable type."
+                },
+                {
+                  "disabled": false,
+                  "key": "isPartial",
+                  "value": "<boolean>",
+                  "description": "Indication of whether the file contains partial result set or complete result set."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3e22a6e-c3a8-4296-94eb-4d52d11e02b2",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortBy",
+                      "value": "createdTimestamp"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPartial",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deliverables\": [\n    {\n      \"projectId\": \"00000000-0000-0000-0000-000000000000\",\n      \"deliverableId\": \"00000000-0000-0000-0000-000000000000\",\n      \"type\": \"string\",\n      \"fileName\": \"string\",\n      \"createdTimestamp\": \"2024-06-09T01:45:34.069Z\",\n      \"isPartial\": true,\n      \"downloadCount\": 6726\n    },\n    {\n      \"projectId\": \"00000000-0000-0000-0000-000000000000\",\n      \"deliverableId\": \"00000000-0000-0000-0000-000000000000\",\n      \"type\": \"string\",\n      \"fileName\": \"string\",\n      \"createdTimestamp\": \"1976-02-21T10:11:35.496Z\",\n      \"isPartial\": false,\n      \"downloadCount\": 9375\n    }\n  ],\n  \"totalCount\": 9178\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d12db0eb-35af-4102-b4fd-b85d78b2ca10",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortBy",
+                      "value": "createdTimestamp"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPartial",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b7820d94-b585-4a99-9329-b84079787b29",
+              "name": "Invalid Authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortBy",
+                      "value": "createdTimestamp"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPartial",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2f44854f-04cf-4f1f-aa74-fcc7a292aa0d",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortBy",
+                      "value": "createdTimestamp"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isPartial",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57faa27a-4f11-4170-93d9-bc0a44fb19e1",
+          "name": "Get Deliverable Details",
+          "request": {
+            "name": "Get Deliverable Details",
+            "description": {
+              "content": "Retrieves a deliverable file with details on what will be provided for each project. \r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "deliverables",
+                ":deliverableId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "deliverableId",
+                  "description": "(Required) Deliverable ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e9013506-391a-489e-8c45-7ae8b6b37e19",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"projectId\": \"00000000-0000-0000-0000-000000000000\",\n  \"deliverableId\": \"00000000-0000-0000-0000-000000000000\",\n  \"type\": \"string\",\n  \"fileName\": \"string\",\n  \"createdTimestamp\": \"1998-07-03T22:11:10.145Z\",\n  \"isPartial\": true,\n  \"downloadCount\": 3142\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e55ea71-e034-4baa-84dc-695cb0d11ecb",
+              "name": "Invalid Authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95df9d22-2870-4432-b436-9afe37c05fd5",
+              "name": "Project or deliverable does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "90e6bdf4-4f5b-4796-8547-3e6090a03687",
+          "name": "Get Deliverable Download",
+          "request": {
+            "name": "Get Deliverable Download",
+            "description": {
+              "content": "Download the project deliverable file.\r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "deliverables",
+                ":deliverableId",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "deliverableId",
+                  "description": "(Required) Deliverable ID."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "27abf110-9128-4ee9-8a1b-c4b76604c6cb",
+              "name": "Success. The file is returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "69244062-bcf2-4976-8203-ed56d554952c",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1c731ad3-167b-45a6-ba41-1e44387045ec",
+              "name": "Project or deliverable does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "deliverables",
+                    ":deliverableId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "deliverableId",
+                      "description": "(Required) Deliverable ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e956ab54-8c03-40b0-97de-d42fd4c85e3d",
+    "name": "Defined.ai Deliverables API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+      "type": "text/plain"
+    }
+  }
+}

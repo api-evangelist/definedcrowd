@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Subscriptions API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/subscriptions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of subscribed notifications within a specific project.\r\n            \r\n**Permissions:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Put Subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/subscriptions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Subscribe or edit the list of email addresses that receive the notifications.\r\nCurrently, the following types of events are available for subscription:\r\n            \r\n**Data Upload Completed:** Receive a notification when an upload of data for the project\r\nis completed, including information if any errors were found. The email is only sent after\r\nthe asynchronous part of the upload is finished. Note that you will receive an email per each\r\ninput unit set uploaded. You can know more\r\nin <a href=\""
+        },
+        {
+          "info": {
+            "name": "Delete Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/subscriptions/:type",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Type of notifications. Valid values: \"DeliverablePublished\" and \"DataUploadCompleted\"."
+              }
+            ]
+          },
+          "docs": "Allows to unsubscribe each of the existing notifications. \r\n             \r\n**Permissions**: Update Project Properties"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

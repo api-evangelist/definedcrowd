@@ -1,0 +1,1580 @@
+{
+  "item": [
+    {
+      "id": "26367e5b-5248-480f-90f5-5420c02e9e9a",
+      "name": "Input Units",
+      "description": {
+        "content": "Each input unit is a single component of work done by the contributors. There are several types of units – audio, text, and image. In a given project, all units should have the same structure. The input unit schema explains the structure of input units. \n\n Note: Input Units are a part of projects. They are not separate entities. ",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "66d6cf1c-b572-4419-8535-77853990ac25",
+          "name": "Get Input Unit Schema",
+          "request": {
+            "name": "Get Input Unit Schema",
+            "description": {
+              "content": "The format of the input unit required for the project upload is retrieved. Please note that,\r\nthe endpoint will return an object with required fields and their properties format for each input unit\r\non the desired project. However, when uploading you need to create an array with those required fields,\r\nrespecting their properties. To upload, you should use the [UPLOAD INPUT UNIT](#operation/UploadManagement_UploadInputUnits) endpoint.\r\n            \r\n**Permission Required:** Upload Data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "inputUnitsSchema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e0bff8a-5d13-4984-82d8-afc8e894e8df",
+              "name": "Returns hit Upload Schema for the requested project.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnitsSchema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"audioSample\",\n    \"sentenceSample\"\n  ],\n  \"properties\": {\n    \"audioSample\": {\n      \"type\": \"string\",\n      \"format\": \"uri\",\n      \"urlType\": \"audio\",\n      \"examples\": [\n        \"http://example.com\"\n      ]\n    },\n    \"sentenceSample\": {\n      \"type\": \"string\"\n    },\n    \"id\": {\n      \"type\": \"string\",\n      \"format\": \"guid\"\n    },\n    \"details\": {\n      \"type\": \"string\",\n      \"maxLength\": 500,\n      \"examples\": [\n        \"This is a sample of details\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84ad1871-4925-48d0-857e-d62c78204dfe",
+              "name": "No hit Upload Schema for the requested project.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnitsSchema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c5b1a83-ef5c-4716-aebe-c251f92d755c",
+              "name": "Invalid job configuration.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnitsSchema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7b62a7f9-9032-4cb1-808a-24ccf3fa779b",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnitsSchema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3caa94f-179f-4a87-96ad-6c8b078f5acf",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnitsSchema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1da0c29a-0ed5-4534-898a-f8fe26cdb812",
+          "name": "Upload Input Units",
+          "request": {
+            "name": "Upload Input Units",
+            "description": {
+              "content": "You can upload input units to the project, which contributors will work on.\r\nMaximum size allowed is 250 MB of data.\r\n            \r\n**How to upload**\r\n            \r\nTo know which properties should be used to upload the input units properly, you should use the\r\n[GET INPUT UNIT SCHEMA](#operation/UploadManagement_GetInputUnitSchema) endpoint.\r\nPlease note that, the endpoint will return an object with required\r\nfields and their properties format for each input unit on the desired project. However, when uploading\r\nyou need to create an array with those required fields, respecting their properties.\r\n            \r\n**Configure your Amazon S3 bucket policy to grant cross-account access to Define.ai**\r\n            \r\nYou can use AWS S3 to store and submit your input units with the file URLs in\r\nS3:// protocol(for example, S3://bucket-name/key-name) rather than http:// or https:// protocol.\r\nConfigure your S3 bucket policy to give permission to the following IAM role for Define.ai\r\nto access your files. \n\r\nTo do this, you must be the S3 bucket owner.\r\nGot to bucket >> permission >> bucket policy, and add the following policy \n\r\n(Note that the place holder ${BucketName} should be replaced by your S3 bucket name)\r\n\n\r\n            \r\n    {\r\n        \"Version\": \"2012-10-17\",\r\n         \"Statement\": [{\r\n                \"Effect\": \"Allow\",\r\n                \"Principal\": {\r\n                    \"AWS\": \"arn:aws:iam::463637393528:user/prod-devteam-user\"\r\n                },\r\n                \"Action\": [\r\n                    \"s3:GetObject\",\r\n                    \"s3:ListBucket\"\r\n                ],\r\n                \"Resource\": [\r\n                    \"arn:aws:s3:::${BucketName}/*\",\r\n                    \"arn:aws:s3:::${BucketName}\"\r\n                ]\r\n        }]\r\n    }\r\n            \r\n\n\r\n**How validation works**\r\n            \r\nTwo validations phases follow the upload operation. First, a synchronous phase and, if completed\r\nsuccessfully, an asynchronous phase. Validation failure will return a list of up to 50 error codes and\r\nmessages to resolve. Review these errors and upload the unsuccessful input units again.\r\n            \r\nThe project state will change to PROCESSING DATA UPLOAD once there are input units passing all syntax and\r\nformat evaluations.\r\n            \r\n**Example of how validation and upload of Input Units work**\r\n            \r\nYou upload 1 000 input units. 100 validation errors are found. Remember the validation returns the\r\nfirst 50 error messages. Review the errors and correct errors for all 100 input units and reload the\r\nset of 100 (not all 1 000). Validation takes place (asynchronous phase), and successful input units are\r\nuploaded to the system.\r\n            \r\n**Understand the project state based on asynchronous validation phase**\r\n            \r\nErrors found will change the project state to either UPLOAD ERRORS or INSUFFICIENT DATA, depending on\r\nwhether there is valid input unit(s). Retrieve the error list by using GET PROJECT ERRORS endpoint.\r\n            \r\nA single valid input unit will change the project state to PROCESSING DATA UPLOAD. Data can be added\r\nuntil the project state changes to PREPARING PROJECT.\r\n            \r\n**Permission Required:** Upload Data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "inputUnits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<object>\",\n  \"<object>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "760cecf3-e6f5-471f-aa9d-be6c289254dc",
+              "name": "Accepted. Job is updated asynchronously.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"audioSample\": \"S3://bucket-name/key-name\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  },\n  {\n    \"audioSample\": \"https://audio-sample.wav\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uploadId\": \"00000000-0000-0000-0000-000000000000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11f89a16-0823-4f21-ba3e-f7ebba338520",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"audioSample\": \"S3://bucket-name/key-name\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  },\n  {\n    \"audioSample\": \"https://audio-sample.wav\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9525a30b-28fe-4a25-94e7-07f28369a24f",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"audioSample\": \"S3://bucket-name/key-name\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  },\n  {\n    \"audioSample\": \"https://audio-sample.wav\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "db6f15f5-c54f-442c-8c1f-a30f721d7d37",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "inputUnits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"audioSample\": \"S3://bucket-name/key-name\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  },\n  {\n    \"audioSample\": \"https://audio-sample.wav\",\n    \"sentenceSample\": \"This is a sentence sample.\",\n    \"details\": \"This is a sentence details.\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f0745e06-946f-4e79-b8b5-4acc7cc9e97c",
+          "name": "Get Project Errors",
+          "request": {
+            "name": "Get Project Errors",
+            "description": {
+              "content": "After the synchronous upload is completed successfully, the asynchronous process is triggered.\r\nValidation errors during this phase will change the project state to either UPLOAD ERRORS or\r\nINSUFFICIENT DATA, depending on whether there is valid input unit(s). A detailed list of errors will be\r\nreturned. Review the error list and re-upload the set using the same Input Unit ID.\r\n            \r\n**List of possible errors:**\r\n| Error Types | Description |\r\n|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|\r\n| ConnectionUnsuccessful | Connection to the URL provider was unsuccessful |\r\n| UrlNotSupported | The provided URL is not formatted over HTTP, HTTPS or S3 protocols |\r\n| FileDoesNotExist\n\n Possible values for errorDetails field:\n\n* NoSuchKey.\n\n* NoSuchBucket. | The provided URL does not contain a file or, if S3 protocol is used, the specified key/bucket does not exist. |\r\n| FileIsNotValid\n\nPossible values for `errorDetails` field:\n\n* .WAV file failed format validations. Check public API documentation or contact Enterprise Support.\n\n* .WAV file failed validation: fmt chunk size must be greater than or equal to 16.\n\n* .WAV file failed validation: bits per sample must be between 4 and 16.\n\n* .WAV file failed validation: PCM audio format is required. \n\n* .WAV file failed validation: number of channels must be between 1 and 8. | The provided URL contains invalid file formats (accepted file formats: audio (.wav)) |\r\n| UnauthorizedAccess | The provided URL cannot be accessed due to authentication issues |\r\n| StatusCodeDoesNotIndicateSuccess\n\nPossible values for `errorDetails` field:\n\n* e.g. 429 TooManyRequests. | Remote server returned an error when queried resource under corresponding URL. Please, see `errorDetails` for actual error code and error message. |\r\n| PlatformError | Something went wrong on our side |\r\n\n\r\n**Sample:**\r\n            \r\n    {\r\n        \"uploadInputUnitsError\":\r\n        [\r\n            {\r\n                \"inputDataUnitId\": \"00000000-0000-0000-0000-000000000000\",\r\n            \r\n                \"errorType\": \"FileIsNotValid\",\r\n            \r\n                \"errorDetails\": \".WAV file failed validation: ChunkSize should always be 16 (PCM format) or greater. \",\r\n            \r\n                \"errorProperty\": {\r\n                    \"inputDataUnitProperty\": \"audioSample\",\r\n            \r\n                    \"inputDataUnitPropertyValue\": \"http://example.com\"\r\n                },\r\n            \r\n                \"inputDataUnit\": { }\r\n            }\r\n        ],\r\n        \"totalCount\": 1\r\n    }\r\n            \r\n\n\r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "errors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "0",
+                  "description": "The page to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "itemsPerPage",
+                  "value": "10",
+                  "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "uploadId",
+                  "value": "<uuid>",
+                  "description": "ID for a set of uploaded input units."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3df8a235-57c1-4b6c-a9ea-bb2c32a20156",
+              "name": "Returns a list with project information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "uploadId",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uploadInputUnitsError\": [\n    {\n      \"inputDataUnitId\": \"00000000-0000-0000-0000-000000000000\",\n      \"errorType\": \"platformError\",\n      \"errorDetails\": \"string\",\n      \"errorProperty\": {\n        \"inputDataUnitProperty\": \"string\",\n        \"inputDataUnitPropertyValue\": \"string\"\n      },\n      \"inputDataUnit\": {}\n    },\n    {\n      \"inputDataUnitId\": \"00000000-0000-0000-0000-000000000000\",\n      \"errorType\": \"statusCodeDoesNotIndicateSuccess\",\n      \"errorDetails\": \"string\",\n      \"errorProperty\": {\n        \"inputDataUnitProperty\": \"string\",\n        \"inputDataUnitPropertyValue\": \"string\"\n      },\n      \"inputDataUnit\": {}\n    }\n  ],\n  \"totalCount\": 3200\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "174dde22-de72-40b1-9d8f-36665a5c5312",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "uploadId",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7858be29-2b30-44c1-a66f-4fc41c8c01db",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "uploadId",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c6531fc7-8874-488b-a043-c3e1b940c715",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    },
+                    {
+                      "key": "uploadId",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2da27c97-2265-4348-9898-7da6d3d83228",
+          "name": "Get Project Uploads",
+          "request": {
+            "name": "Get Project Uploads",
+            "description": {
+              "content": "Retrieve the status of a project’s input unit set. Each set of uploaded input units generate an ID\r\nthat you can use to retrieve the upload status, the number of input units submitted, the successful\r\ninput units, and the error input units.\r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "uploads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "0",
+                  "description": "The page to retrieve. (0 by default)"
+                },
+                {
+                  "disabled": false,
+                  "key": "itemsPerPage",
+                  "value": "10",
+                  "description": "The number of items to retrieve per page.\r\nThe maximum number of items per page allowed is 100. (10 by default)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d00c5082-fb3a-4a52-a870-0d53300fe2bc",
+              "name": "Returns a list with information about the uploads.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uploads\": [\n    {\n      \"uploadId\": \"00000000-0000-0000-0000-000000000000\",\n      \"inputDataUnitsStats\": {\n        \"submitted\": 9595,\n        \"success\": 8775,\n        \"error\": 5155\n      },\n      \"isUploading\": true,\n      \"uploadStartTimestamp\": \"1957-05-03T12:51:29.482Z\",\n      \"uploadEndTimestamp\": \"1969-07-19T01:16:53.961Z\"\n    },\n    {\n      \"uploadId\": \"00000000-0000-0000-0000-000000000000\",\n      \"inputDataUnitsStats\": {\n        \"submitted\": 602,\n        \"success\": 7755,\n        \"error\": 7629\n      },\n      \"isUploading\": true,\n      \"uploadStartTimestamp\": \"1979-06-29T18:11:37.652Z\",\n      \"uploadEndTimestamp\": \"1983-02-17T16:57:54.001Z\"\n    }\n  ],\n  \"totalCount\": 5690\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1db3c160-010f-4a2c-9b1d-668e9b59dc17",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bf945d2a-8365-4b52-8954-60ddc16255df",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "27397854-342d-4618-ad95-fc7a031be2a2",
+              "name": "Project does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "0"
+                    },
+                    {
+                      "key": "itemsPerPage",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "656930fc-2fd7-480f-9975-529ac832e610",
+          "name": "Get Project Upload",
+          "request": {
+            "name": "Get Project Upload",
+            "description": {
+              "content": " Retrieve the status of an input unit set uploaded for a project.\r\n            \r\n**Permission Required:** Read Project Properties",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "projects",
+                ":projectId",
+                "uploads",
+                ":uploadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) Project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uploadId",
+                  "description": "(Required) ID for a set of uploaded input unit."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b86cc3d4-c27b-46de-a93f-42c816636f6d",
+              "name": "Returns upload information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) ID for a set of uploaded input unit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uploadId\": \"00000000-0000-0000-0000-000000000000\",\n  \"inputDataUnitsStats\": {\n    \"submitted\": 8665,\n    \"success\": 1643,\n    \"error\": 4672\n  },\n  \"isUploading\": true,\n  \"uploadStartTimestamp\": \"1948-07-26T15:36:12.064Z\",\n  \"uploadEndTimestamp\": \"2018-02-26T16:57:24.055Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5464eefd-c618-44b7-8741-62e733f268a6",
+              "name": "Invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) ID for a set of uploaded input unit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8bdd19ae-1ab3-4781-ac8b-197b34ccc3a1",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) ID for a set of uploaded input unit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a13ef3f3-715f-4f12-bf93-329043e1ffb1",
+              "name": "Project or upload does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "projects",
+                    ":projectId",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) Project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) ID for a set of uploaded input unit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "58bd7253-d82d-45c4-a6b9-05a416b0fcdc",
+    "name": "Defined.ai Deliverables Input Units API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+      "type": "text/plain"
+    }
+  }
+}

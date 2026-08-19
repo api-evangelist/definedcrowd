@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Mean Opinion Score API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Mean Opinion Score",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2.0/public/projects/MeanOpinionScore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a Mean Opinion Score project with a specific type and respective options.\r\n            \r\n**Permission Required:** Create Projects"
+        },
+        {
+          "info": {
+            "name": "Upload input units",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2.0/public/projects/MeanOpinionScore/:projectId/inputUnits",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nThe uploading of input units is an asynchronous process.\r\nOur API performs a variety of syntax evaluations upon method invocation and will return syntax-type errors\r\nimmediately.\r\nIf the uploaded input units passes syntax evaluations, the Project state will change to PROCESSING DATA UPLOAD.\r\nErrors found during asynchronous processing of the uploaded input units will change the Project state to UPLOAD\r\nERRORS.\r\nTo retrieve the spec"
+        },
+        {
+          "info": {
+            "name": "Get Result Set",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/MeanOpinionScore/:projectId/resultset",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ]
+          },
+          "docs": "Gets result set for the entire project.\r\n            \r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Clone project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2.0/public/projects/MeanOpinionScore/:projectId/clone",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the project configuration, then creates a new project with the retrieved configuration.\r\n            \r\n**Permission Required:** Create Projects, Read Project Properties"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deliverables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Deliverables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/deliverables",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Type of filter. Valid values: \"createdTimestamp\", \"isPartial\", \"downloadCount\", \"fileName\", \"type\".\r\nPlease note that, it is only possible to use one filter at a time."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Order of displayed results. Valid values: \"asc\", \"desc\"."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "The page to retrieve."
+              },
+              {
+                "name": "itemsPerPage",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The project deliverable type."
+              },
+              {
+                "name": "isPartial",
+                "value": "",
+                "type": "query",
+                "description": "Indication of whether the file contains partial result set or complete result set."
+              }
+            ]
+          },
+          "docs": "The function retrieves details, including metadata and the ID, for all available files\r\nof the given project ID.  \r\n            \r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Get Deliverable Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/deliverables/:deliverableId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "deliverableId",
+                "value": "",
+                "type": "path",
+                "description": "Deliverable ID."
+              }
+            ]
+          },
+          "docs": "Retrieves a deliverable file with details on what will be provided for each project. \r\n            \r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Get Deliverable Download",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/deliverables/:deliverableId/download",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "deliverableId",
+                "value": "",
+                "type": "path",
+                "description": "Deliverable ID."
+              }
+            ]
+          },
+          "docs": "Download the project deliverable file.\r\n            \r\n**Permission Required:** Read Project Properties"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

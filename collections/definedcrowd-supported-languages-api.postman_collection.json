@@ -1,0 +1,213 @@
+{
+  "item": [
+    {
+      "id": "506a623d-ad59-468d-b972-3e9bdb57ef75",
+      "name": "Supported Languages",
+      "description": {
+        "content": "Several of the Workflow Templates offer the ability to set a language / country code. These configurations instruct Defined.ai to use our human intelligence Contributors that speak and / or reside in the specified language / country. The REST API provides a method called “Get Supported Languages” that returns the set of languages, language features and associated language codes that are used by our APIs and supported by the Defined.ai platform. ",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e928fd06-60f7-4d57-a5cc-41c1d3ceb8a2",
+          "name": "Get supported languages",
+          "request": {
+            "name": "Get supported languages",
+            "description": {
+              "content": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nReturns a list of language and country combinations supported by Defined.ai, the language code associated\r\nwith each combination, and whether Defined.ai supports the ability to source for a specific language’s\r\nnative speakers, all of whom have passed a series of language tests administered by Defined.ai.\r\n            \r\nThe Language code may be added to the Configuration of a Project. If you need to source high-quality data\r\nfrom native speakers, the value nativeSpeakerSupported will indicate whether Defined.ai supports that\r\ncapability the specific language you’re looking for.\r\n\r\nThe number of languages we support varies. \r\n\r\nDefined.ai currently supports the following languages:    \r\n            \r\n            \r\n\r\n| **Language** | **Country** | **Language Code + Country** |\r\n|:------------:|:-----------:|:---------------------------:|\r\n| **Arabic**| Egypt | ar-EG |\r\n| **Arabic**| Jordan | ar-JO |\r\n| **Arabic**| Morocco | ar-MA |\r\n| **Arabic**| Saudi Arabia | ar-SA |\r\n| **Arabic**| United Arab Emirates | ar-AE |\r\n| **Arabic**| Yemen | ar-YE |\r\n| **Basque**| Spain | eu-ES |\r\n| **Bengali**| India | bn-IN |\r\n| **Catalan**| Spain | ca-ES |\r\n| **Chinese Simplified**| China (Mandarin) | zh-CN |\r\n| **Chinese Simplified**| Singapore (Mandarin) | zh-SG |\r\n| **Chinese Traditional**| Taiwan (Mandarin) | zh-TW |\r\n| **Chinese Traditional**| Hong Kong (Cantonese) | zh-HK |\r\n| **Croatian**| Croatia | hr-HR |\r\n| **Czech**| Czech Republic | cs-CZ |\r\n| **Danish**| Denmark | da-DK |\r\n| **Danish**| Greenland | da-GL |\r\n| **Dutch**| Netherlands | nl-NL |\r\n| **Dutch**| Belgium (Flemish) | nl-BE |\r\n| **English**| United Kingdom | en-GB |\r\n| **English**| United States | en-US |\r\n| **English**| Canada | en-CA |\r\n| **English**| Philippines | en-PH |\r\n| **English**| Singapore | en-SG |\r\n| **English**| Australia | en-AU |\r\n| **English**| New Zealand | en-NZ |\r\n| **English**| India | en-IN |\r\n| **English**| Ireland | en-IE |\r\n| **English**| South Africa | en-ZA |\r\n| **Estonian**| Estonia | et-EE |\r\n| **Finnish**| Finland | fi-Fl |\r\n| **French**| France | fr-FR |\r\n| **French**| Belgium | fr-BE |\r\n| **French**| Canada | fr-CA |\r\n| **Galician**| Spain | gl-ES |\r\n| **German**| Germany | de-DE |\r\n| **German**| Belgium | de-BE |\r\n| **German**| Austria | de-AT |\r\n| **German**| Switzerland | de-CH |\r\n| **Greek**| Greece | el-GR |\r\n| **Gujarati**| India | gu-IN |\r\n| **Hebrew**| Israel | he-IL |\r\n| **Hindi**| India | hi-IN |\r\n| **Hungarian**| Hungary | hu-HU |\r\n| **Indonesian (Bahasa)**| Indonesia | id-ID |\r\n| **Irish**| Ireland | ga-IE |\r\n| **Italian**| Italy | it-IT |\r\n| **Japanese**| Japan | ja-JP |\r\n| **Kannada**| India | ml-IN |\r\n| **Korean**| South Korea | ko-KR |\r\n| **Latvian**| Latvia | lv-LV |\r\n| **Lithuanian**| Lithuania | lt-LT |\r\n| **Malay**| Malaysia | ms-MY |\r\n| **Malayalam**| India | ml-IN |\r\n| **Marathi**| India | mr-IN |\r\n| **Norwegian Bokmål**| Norway | nb-NO |\r\n| **Persian / Farsi**| Iran | fa-IR |\r\n| **Polish**| Poland | pl-PL |\r\n| **Portuguese**| Portugal | pt-PT |\r\n| **Portuguese**| Brazil | pt-BR |\r\n| **Portuguese**| Angola | pt-AO |\r\n| **Portuguese**| Mozambique | pt-MZ |\r\n| **Punjabi**| India | pa-IN |\r\n| **Romanian**| Romania | ro-RO |\r\n| **Russian**| Russia | ru-RU |\r\n| **Slovak**| Slovakia | sk-SK |\r\n| **Slovenian**| Slovenia | sl-SI |\r\n| **Spanish**| Spain | es-ES |\r\n| **Spanish**| Argentina | es-AR |\r\n| **Spanish**| Chile | es-CL |\r\n| **Spanish**| Colombia | es-CO |\r\n| **Spanish**| Mexico | es-MX |\r\n| **Spanish**| Peru | es-PE |\r\n| **Spanish**| Paraguay | es-PY |\r\n| **Spanish**| United States | es-US |\r\n| **Spanish**| Venezuela | es-VE |\r\n| **Swedish**| Sweden | sv-SE |\r\n| **Tamil**| Singapore | ta-SG |\r\n| **Telugu**| India | te-IN |\r\n| **Thai**| Thailand | th-TH |\r\n| **Turkish**| Turkey | tr-TR |\r\n| **Ukrainian**| Ukraine | uk-UA |\r\n| **Urdu**| India | ur-IN |\r\n| **Vietnamese**| Vietnam | vi-VN |\r\n\r\n            \r\n\n\r\n**Permission Required:** None",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2.0",
+                "public",
+                "languages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5266d9c6-ff55-4686-8d6d-4f67532645e3",
+              "name": "Returns a list with the language information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "languages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"languages\": [\n    {\n      \"language\": \"string\",\n      \"languageCode\": \"string\",\n      \"country\": \"string\",\n      \"nativeSpeakerSupported\": true\n    },\n    {\n      \"language\": \"string\",\n      \"languageCode\": \"string\",\n      \"country\": \"string\",\n      \"nativeSpeakerSupported\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "faf14aad-8773-4cb9-a888-c5758eb17fbc",
+              "name": "Invalid authentication (invalid/expired token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "languages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f960c185-00a3-4cd5-9fb7-607c01fc19cf",
+              "name": "Invalid Enterprise Subscription.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2.0",
+                    "public",
+                    "languages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "88bca1f4-e57d-4aa4-b5de-3e8c679a7c92",
+    "name": "Defined.ai Deliverables Supported Languages API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nWelcome to the Defined.ai Public API.\n\nTo get started you need a Defined.ai Enterprise account to manage your project in [Enterprise Portal](https://enterprise.definedcrowd.com).\nPlease contact Defined<area>.ai’s sales team at sales@defined.ai to set up your Defined<area>.ai Enterprise account.\n\nDefined.ai offers an intelligent data infrastructure that provides high-quality training data that enables customers \nwith AI roadmaps reach market at better quality and speed. Defined.ai collects, structures, \nand enriches high-quality training data for AI initiatives using efficient data workflows that combine human intelligence,\nautomatic tools and machine learning capabilities. \n\nThis REST API provides a programmable interface for directly integrating your data processes with Defined.ai’s platform.  \nFrom the REST API, you can create or clone Projects based on Workflow Templates, upload your data, \nand monitor them during their execution.  Upon Project completion, it’ll be possible to quickly retrieve high-quality \ntraining data enriched by the Defined.ai platform.\n\nHere are some essential concepts to help you understand and use our REST API to its fullest potential: \n\n* A **Contributor** is someone who participates in the project execution.  This is our human intelligence component.\n* One or more Contributors work on **Input Units**.  When you submit data for evaluation, each individual item within that submitted data is an Input Unit.  \n* A **Workflow Template**  is a pre-configured set of steps designed for executing specific types of tasks.  A Project combines a Workflow Template with Input Units.\n* A **Job** determines the rules of execution for each input unit (e.g. how many Contributor can execute each input unit).\n\n\nOur Workflow Templates fall into the following offers:\n* Mean Opinion Score\n* Pronunciation Validation\n* ABx Testing\n\nWorkflow Templates can be data collection specific. Here, Defined.ai uses data-based “prompts” that you provide as Input Units and are then displayed in our data collection tools.  Defined.ai also provides Workflow Templates for structuring and enriching customer-provided data.  That data, which you provide as Input Units,  can be text and audio.  \n\nOur REST API is based on four primary actions:\n\n1. [**Clone a Project**](#operation/Projects_CloneProject) – A Project consists of a specific Workflow Template, a configuration that instructs Defined.ai how to execute the Project and the actual data to operate on.\n2. [**Set Subscriptions**](#operation/Subscriptions_SubmitSubscriptions) – Subscribe to automatic notifications for specific email addresses. Email notifications are sent for events that happen during the life cycle of the project (e.g. when the upload finishes or when the deliverables are ready to download)\n3. [**Upload Input Units**](#operation/UploadManagement_UploadInputUnits) – This is a unit of work that can be performed by one or more Contributors.  Each uploaded unit within the data that you submit will be validated and uploaded into the platform.  Each unit can then be executed multiple times by different Contributors in different steps, depending on the configuration defined in the project. It is possible to know what to upload by [getting the input unit schema](#operation/UploadManagement_GetInputUnitSchema). When the upload is finished, the project starts automatically.\n4. [**Get Deliverables**](#operation/ProjectsDeliverables_GetDeliverables) – When project execution is complete, this action allows you to obtain the results. \n   \nThe following image shows the end-to-end life cycle of a project:\n\n   ![API Workflow](https://dcpd01workflowstorage.definedcrowd.com/content/images/api_workflow.png)\n\n\n\n# Authentication\n\nAny application utilizing our REST APIs must first authenticate with our service. Our service utilizes the \nOAuth v2 protocol for authenticating. This requires both an “**Access Key ID**” and an “**Access Key Secret**” \nthat can be secured through Defined.ai’s [Enterprise Portal](https://enterprise.definedcrowd.com). The Access Key pair \nmust be secured appropriately and cannot be shared.\n\nAssociated with an Access Key pair is a set of permissions which are scoped to different functionalities.\n\nBased on your scenario, review the REST API’s below, identify the permissions required and create the \nappropriate API Key permissions. The mapping is described in the following table:\n\n| Access Key Permissions   | Rest API Permissions |\n| :--- | :--- |\n| View Projects | List Projects <br/> Read Project Properties   |\n| Create Projects | List Projects <br/> Read Project Properties <br/>Create Projects <br/> Upload Data <br/> Update Project Properties |\n| Full Projects | List Projects <br/> Read Project Properties <br/> Create Projects <br/> Upload Data <br/> Update Project Properties <br/>Delete Project <br/> |\n\n\nUpon successful authentication, an OAuth token is returned.\n\nOAuth tokens have an expiration time. Access Key Pairs may also be revoked at any time by an Enterprise Portal user. It’s important to take this into consideration when authoring your application.\n\nSecurity scheme type: OAuth2\n\n<div class = \"table--no-header\">\n\n| OAuth2Flow | client_credentials|\n| --- | --- |\n| Token URL | https://auth.definedcrowd.com/connect/token |\n\n</div>\n\n<br/>\nOAuth2 Scopes\n\nPublicAPIv2 — everything\n\n\nAfter the authentication has been done successfully, it’s possible to start to use the API. To do that, the URL for the API should be the following:\n\n> https://api.production-na01.definedcrowd.com/[VERSION]/[APINAME]/\n\nFor example:\n\n> https://api.production-na01.definedcrowd.com/v2.0/public/projects/3964986c-3d34-447f-9d75-740584575d2b/clone\n\nNote: All calls must be performed over Secure HTTP (HTTPS).\n\n# Errors\n\nEach of our REST APIs returns standard HTTP responses that communicate successes or errors.  If a response is unsuccessful, we provide detailed error information in the response, as in the example below:\n\n~~~json\nHttpStatusCode: 400\nBody:\n{\n    \"errors\": [\n       {\n            \"code\": \"requestInvalidParameter\",\n            \"innercode\": \"projectItemCountOOB\",\n            \"message\": \"The number of items per page is out of bounds.\",\n            \"details\": {\n                \"ItemsPerPage\": 101,\n                \"ItemsPerPageNeeded\": \"ItemsPerPage > 0 AND ItemsPerPage < 100\"\n            }\n        }\n    ]\n}\n~~~\n\n\nThe following error codes are returned in cases where an API invocation was unsuccessful\n\n| **HTTP Status Code** | **Error Code** | **Error Inner Code** |\n| --- | --- | --- |\n| 400 Bad Request |   |   |\n|   | invalidProjectId | none |\n|   | projectAlreadyExists | none |\n|   | projectInvalidInputUnit |  |\n|   |   | duplicateId |\n|   |   | duplicateIdInPlatform |\n|   |   | invalidSchemaFormat |\n|   | partnerInvalidKey | none |\n|   | projectInvalidState |  |\n|   |   | invalidCurrentState |\n|   |   | invalidStateChange |\n|   | projectInvalidType | none |\n|   | requestInvalidBody |   |\n|   |   | duplicatedEmail |\n|   |   | emailInvalid |\n|   |   | jobSettingsContributorsPerInputUnitOOB |\n|   |   | jsonParsingError |\n|   |   | projectConfigNull |\n|   |   | projectIdNull |\n|   |   | projectInvalidFutureDesiredDeliveryDate |\n|   |   | projectMetatagCountOOB |\n|   |   | projectMetatagInvalidCharacters |\n|   |   | projectMetatagKeyLengthOOB |\n|   |   | projectMetatagValueLengthOOB |\n|   |   | projectNameNull |\n|   |   | projectNameSizeOOB |\n|   |   | projectUnitCountOOB |\n|   |   | projectSettingsAgeDistributionOOB |\n|   |   | projectSettingsCategoryNull |\n|   |   | projectSettingsCategoryIdNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameNull |\n|\t|\t| ProjectSettingsCategoryDisplayNameOOB |\n|   |   | projectSettingsCategoryDescriptionNull |\n|   |   | projectSettingsCategoryCountOOB |\n|   |   | projectSettingsCategoryDuplicated |\n|   |   | projectSettingsCategoryExampleCountOOB |\n|   |   | projectSettingsContributorsPerUnitOOB |\n|   |   | projectSettingsDeviceLocationDistributionOOB |\n|   |   | projectSettingsDeviceLocationInvalidTarget |\n|   |   | projectSettingsDomainNull |\n|   |   | projectSettingsDomainCountOOB |\n|\t|\t| projectSettingsDomainDescriptionNull |\n|   |   | projectSettingsDomainDisplayNameNull |\n|   |   | projectSettingsDomainDisplayNameOOB |\n|   |   | projectSettingsDomainDuplicated |\n|\t|\t| projectSettingsDomainExampleCountOOB |\n|   |   | projectSettingsDomainIdNull |\n|   |   | projectSettingsDomainIdOOB |\n|   |   | projectSettingsDomainIntentsDuplicated |\n|   |   | projectSettingsDomainIntentsNull |\n|   |   | projectSettingsDomainIntentsOOB |\n|   |   | projectSettingsExamplesOOB |\n|   |   | projectSettingsGenderDistributionOOB |\n|   |   | projectSettingsInputUnitAudioUrlNull |\n|   |   | projectSettingsInputUnitAudioUrlInvalid |\n|   |   | projectSettingsInputUnitDetailsTooLong |\n|   |   | projectSettingsInputUnitDuplicated |\n|   |   | projectSettingsInputUnitNull |\n|   |   | projectSettingsInputUnitSentenceNull |\n|\t|\t| projectSettingsIntentDescriptionNull |\n|   |   | projectSettingsIntentDisplayNameNull |\n|   |   | projectSettingsIntentDisplayNameOOB |\n|\t|\t| projectSettingsIntentExampleCountOOB |\n|   |   | projectSettingsIntentIdNull |\n|   |   | projectSettingsIntentIdOOB |\n|   |   | projectSettingsLanguageCodeInvalid |\n|   |   | projectSettingsLanguageCodeNull |\n|   |   | projectSettingsLanguageNull |\n|\t|\t| projectSettingsLanguageTestUnsupported |\n|   |   | projectSettingsNull |\n|   |   | projectSettingsSubCategoryCountOOB |\n|   |   | projectSettingsSubCategoryDescriptionNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameNull |\n|\t|\t| projectSettingsSubCategoryDisplayNameOOB |\n|   |   | projectSettingsSubCategoryDuplicated |\n|   |   | projectSettingsSubCategoryExampleCountOOB |\n|   |   | projectSettingsSubCategoryIdNull |\n|   |   | projectSettingsTextCollectionNull |\n|   |   | projectSettingsTextCorrectionNull |\n|   |   | projectWebhookNotAbsoluteUrl |\n|   |   | projectWebhookNotHttps |\n|   |   | projectWebhookNull |\n|   |   | subscriptionInvalidType |\n|   |   | subscriptionSettingsEmailCountOOB |\n|   | requestInvalidParameter |   |\n|   |   | projectItemCountOOB |\n|   |   | projectPageNumberOOB |\n|   |   | subscriptionInvalidType |\n|   | jobInvalid | jobNotCloneable |\n| 401 Unauthorized |   |   |\n|   | authorizationInvalidToken | none |\n| 402 Payment Required |   |   |\n|   | accountNotEnoughCredits | none |\n| 403 Forbidden |   |   |\n|   | accountInvalidProject | none |\n|   | invalidEmailListConsent | none |\n| 404 Not Found |   |   |\n|   | projectNotFound | none |\n|   | subscriptionNotFound | none |\n| 500 Internal Server Error |   |   |\n|   | internalServerError | none |\n",
+      "type": "text/plain"
+    }
+  }
+}

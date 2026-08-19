@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Supported Languages API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Supported Languages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get supported languages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/languages"
+          },
+          "docs": "|<i style=\"color: #EB9D06\">The endpoint will be deprecated</i>\n\r\nReturns a list of language and country combinations supported by Defined.ai, the language code associated\r\nwith each combination, and whether Defined.ai supports the ability to source for a specific language’s\r\nnative speakers, all of whom have passed a series of language tests administered by Defined.ai.\r\n            \r\nThe Language code may be added to the Configuration of a Project. If you need to source high-quality data\r\nfrom n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

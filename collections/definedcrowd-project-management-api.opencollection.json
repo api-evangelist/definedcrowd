@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Project Management API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Project Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Clone Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2.0/public/projects/:sourceProjectId/clone",
+            "params": [
+              {
+                "name": "sourceProjectId",
+                "value": "",
+                "type": "path",
+                "description": "Source Project ID. The project is copied from this ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cloning a project creates a copy of the setup configuration and other elements.\r\nA new project with the same configuration, properties and jobs as the source project is created.  \r\n\r\n**Permission Required:** Create Project"
+        },
+        {
+          "info": {
+            "name": "Get Projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects",
+            "params": [
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "The page to retrieve."
+              },
+              {
+                "name": "itemsPerPage",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to retrieve per page. The maximum number of items per page allowed is 100."
+              }
+            ]
+          },
+          "docs": "Retrieves a comprehensive list of projects and the respective information about those projects associated\r\nwith an Enterprise account. This includes Projects created through the REST API and the Enterprise Portal.\r\n            \r\n**Permission Required:** List Projects"
+        },
+        {
+          "info": {
+            "name": "Get Project Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ]
+          },
+          "docs": "Retrieves the information associated with a Project.\r\n            \r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Edit Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Allows you to edit project settings such as name and desired delivery date, after creation or cloning.\r\nThe editing function stops once the first upload of input units begin and the NOT ACTIVE project state\r\nis changed.\r\n            \r\nNote: both fields must be provided to update either one of them. \r\n\r\n**Permission Required:** Update Project Properties"
+        },
+        {
+          "info": {
+            "name": "Get Project Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/status",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ]
+          },
+          "docs": "When invoked, Get Project Status returns current project status and — if input data errors\r\nwere detected — error information associated with each input data unit where an error occurred.\r\n            \r\nA project’s state can change due to REST API calls executed by your code, changes made to a project in\r\nthe Enterprise Portal as well as project-related events occurring at Defined.ai.\r\nIt is not guaranteed that project states follow a sequential, ordered progression. \r\n             \r\n| REST API "
+        },
+        {
+          "info": {
+            "name": "Cancel Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/cancel",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ]
+          },
+          "docs": "Cancels a Project that has been Started. When Cancel is invoked, Defined.ai reviews the progress of the\r\nProject being canceled. If a portion of the Project has been completed, the Enterprise customer is charged\r\nfor that portion, and refunded with the credits for the remainder of the uncompleted work.\r\n            \r\n**Permission Required:** Update Project Properties"
+        },
+        {
+          "info": {
+            "name": "Delete Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/delete",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project identifier."
+              }
+            ]
+          },
+          "docs": "Deletes a Project.  When a Project is deleted, it is no longer available. As a result, if the Project has\r\nbeen completed and there exists project results, we recommend that project results are retrieved prior to\r\ndeletion.\r\n            \r\nQuick tip: Projects can be deleted if they haven't been started, if they were completed, paused or cancelled. \r\n            \r\n**Permission Required:** Delete Project"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

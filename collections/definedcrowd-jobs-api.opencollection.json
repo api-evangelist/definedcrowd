@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Defined.ai Deliverables Jobs API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/jobs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of job IDs within a specific project. \r\n\r\n**Permission Required:** Read Project Properties"
+        },
+        {
+          "info": {
+            "name": "Edit Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v2.0/public/projects/:projectId/jobs/:jobId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Project ID."
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The job settings are editable until the first input units are uploaded, which means when the project\r\nstate is still NOT ACTIVE. For instance, change the number of contributors allowed for each input unit. \r\n            \r\n**Permission Required:** Update Project Properties"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
