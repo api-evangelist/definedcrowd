@@ -41,6 +41,16 @@ tags:
 - Company
 - AI Training Data
 - Data Marketplace
+- Machine-Learning
+- Data Annotation
+- Speech Data
+- Natural Language Processing
+- Crowdsourcing
+- Artificial Intelligence
+tags_raw:
+- Company
+- AI Training Data
+- Data Marketplace
 - Machine Learning
 - Data Annotation
 - Speech Data
@@ -86,6 +96,8 @@ apis:
   humanURL: https://developers.definedcrowd.com/
   baseURL: https://api.production-na01.definedcrowd.com
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -155,6 +167,8 @@ apis:
   humanURL: https://developers.definedcrowd.com/
   baseURL: https://api.production-na01.definedcrowd.com
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
