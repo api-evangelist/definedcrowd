@@ -1,14 +1,7 @@
 {
   "provider": "definedcrowd",
   "sources": [
-    "definedcrowd-deliverables-api-openapi.yml",
-    "definedcrowd-input-units-api-openapi.yml",
-    "definedcrowd-jobs-api-openapi.yml",
-    "definedcrowd-mean-opinion-score-api-openapi.yml",
-    "definedcrowd-project-management-api-openapi.yml",
-    "definedcrowd-pronunciation-validation-api-openapi.yml",
-    "definedcrowd-subscriptions-api-openapi.yml",
-    "definedcrowd-supported-languages-api-openapi.yml"
+    "_original/definedcrowd-openapi-original.json"
   ],
   "outputs": [
     "definedcrowd-deliverables-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "definedcrowd-openapi-original.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0; renamed 4 component key(s) illegal in 3.x (e.g. DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel`1[[DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel, DefinedCrowd.PublicApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]])",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "definedcrowd-deliverables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-input-units-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-mean-opinion-score-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-project-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-pronunciation-validation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-subscriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "definedcrowd-supported-languages-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

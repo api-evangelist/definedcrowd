@@ -1,0 +1,36 @@
+# Front Door AI Index — definedcrowd — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: definedcrowd
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.definedcrowd.com
+  final_host: defined.ai
+  ownership: own
+  owner: definedcrowd
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 98
+  host_score: 98
+  density: 52.94
+  words: 1851
+  tiers:
+    agentic: 7
+    core: 91
+    model: 0
+  ambiguous: 4
+  top_terms:
+    AI: 74
+    ML: 4
+    LLMs: 3
+    conversational AI: 3
+    gen ai: 3
+    machine learning: 3
+    AI agent: 2
+    agent: 2
+    artificial intelligence: 2
+    fine-tune: 2
+    intelligence: 2
+    large language model: 1
