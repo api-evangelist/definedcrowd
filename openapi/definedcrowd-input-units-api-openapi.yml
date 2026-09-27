@@ -558,6 +558,90 @@ paths:
           description: Project or upload does not exist.
 components:
   schemas:
+    DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult:
+      title: JSON object
+      type: object
+      properties:
+        uploads:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult'
+          description: Details from project’s input unit sets.
+        totalCount:
+          type: integer
+          description: Total number of items available.
+          format: int32
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
+      title: JSON object
+      type: object
+      properties:
+        inputDataUnitProperty:
+          type:
+          - string
+          - 'null'
+          description: Name of property for which error exists.
+        inputDataUnitPropertyValue:
+          type:
+          - string
+          - 'null'
+          description: Original value of the property for which error exists.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult:
+      title: JSON object
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: ID for a set of uploaded input units.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        inputDataUnitsStats:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.Dtos.InputDataUnitsStatsResult'
+          description: Upload statistics.
+        isUploading:
+          type: boolean
+          description: Indication if the upload is still ongoing or not.
+        uploadStartTimestamp:
+          type: string
+          description: Date and timestamp of when the upload started.
+          format: date-time
+        uploadEndTimestamp:
+          type:
+          - string
+          - 'null'
+          description: Date and timestamp of when the upload ended.
+          format: date-time
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult:
+      title: JSON object
+      type: object
+      properties:
+        uploadId:
+          type: string
+          description: ID for a set of uploaded input units.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        uploadInputUnitsError:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError'
+          description: List of errors in the data unit uploading asynchronous process.
+        totalCount:
+          type: integer
+          description: Total number of items available.
+          format: int32
+      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError:
       title: JSON object
       type: object
@@ -624,90 +708,6 @@ components:
           type: integer
           description: Number of input units with errors.
           format: int32
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Upload.UploadInputUnitsResult:
-      title: JSON object
-      type: object
-      properties:
-        uploadId:
-          type: string
-          description: ID for a set of uploaded input units.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Upload.UploadStatusesResult:
-      title: JSON object
-      type: object
-      properties:
-        uploads:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult'
-          description: Details from project’s input unit sets.
-        totalCount:
-          type: integer
-          description: Total number of items available.
-          format: int32
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectErrorsQueryResults:
-      title: JSON object
-      type: object
-      properties:
-        uploadInputUnitsError:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError'
-          description: List of errors in the data unit uploading asynchronous process.
-        totalCount:
-          type: integer
-          description: Total number of items available.
-          format: int32
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
-      title: JSON object
-      type: object
-      properties:
-        inputDataUnitProperty:
-          type:
-          - string
-          - 'null'
-          description: Name of property for which error exists.
-        inputDataUnitPropertyValue:
-          type:
-          - string
-          - 'null'
-          description: Original value of the property for which error exists.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Upload.UploadStateResult:
-      title: JSON object
-      type: object
-      properties:
-        uploadId:
-          type: string
-          description: ID for a set of uploaded input units.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        inputDataUnitsStats:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Upload.Dtos.InputDataUnitsStatsResult'
-          description: Upload statistics.
-        isUploading:
-          type: boolean
-          description: Indication if the upload is still ongoing or not.
-        uploadStartTimestamp:
-          type: string
-          description: Date and timestamp of when the upload started.
-          format: date-time
-        uploadEndTimestamp:
-          type:
-          - string
-          - 'null'
-          description: Date and timestamp of when the upload ended.
-          format: date-time
       additionalProperties: false
   securitySchemes:
     Bearer:

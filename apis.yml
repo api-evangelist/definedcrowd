@@ -51,11 +51,14 @@ specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-07-18'
 image: https://defined.ai/favicon.ico
+x-docs-platform: redoc
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-09-25
 tags:
 - Company
 - AI Training Data
 - Data Marketplace
-- Machine-Learning
+- Machine Learning
 - Data Annotation
 - Speech Data
 - Natural Language Processing
@@ -71,6 +74,7 @@ tags_raw:
 - Natural Language Processing
 - Crowdsourcing
 - Artificial Intelligence
+- Machine-Learning
 apis:
 - aid: definedcrowd:definedcrowd-deliverables-api
   name: Defined.ai (DefinedCrowd) Deliverables API

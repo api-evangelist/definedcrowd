@@ -239,6 +239,18 @@ paths:
       deprecated: true
 components:
   schemas:
+    DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults:
+      title: JSON object
+      type: object
+      properties:
+        languages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.LanguageInfo'
+          description: List of supported languages.
+      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Languages.LanguageInfo:
       title: JSON object
       type: object
@@ -261,18 +273,6 @@ components:
         nativeSpeakerSupported:
           type: boolean
           description: Support for sourcing of native speakers.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Languages.GetLanguagesResults:
-      title: JSON object
-      type: object
-      properties:
-        languages:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Languages.LanguageInfo'
-          description: List of supported languages.
       additionalProperties: false
   securitySchemes:
     Bearer:

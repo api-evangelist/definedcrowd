@@ -369,120 +369,6 @@ paths:
           description: Project does not exist.
 components:
   schemas:
-    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults:
-      title: JSON object
-      type: object
-      properties:
-        projects:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo'
-          description: A page with details from several projects.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError:
-      title: JSON object
-      type: object
-      properties:
-        inputDataUnitId:
-          type: string
-          description: Unique identifier of the input data unit where the error occurred.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        errorType:
-          enum:
-          - connectionUnsuccessful
-          - fileDoesNotExist
-          - fileIsNotValid
-          - unauthorizedAccess
-          - statusCodeDoesNotIndicateSuccess
-          - platformError
-          - urlNotSupported
-          type: string
-          description: Type of error.
-          x-enumNames:
-          - ConnectionUnsuccessful
-          - FileDoesNotExist
-          - FileIsNotValid
-          - UnauthorizedAccess
-          - StatusCodeDoesNotIndicateSuccess
-          - PlatformError
-          - UrlNotSupported
-          x-enumDescriptions:
-          - ''
-          - ''
-          - ''
-          - ''
-          - ''
-          - ''
-          - ''
-          x-ms-enum:
-            name: FileUploadErrorMessage
-            modelAsString: true
-        errorDetails:
-          type:
-          - string
-          - 'null'
-          description: Details of error.
-        errorProperty:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty'
-        inputDataUnit:
-          description: Fields of the original uploaded input unit.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults:
-      title: JSON object
-      type: object
-      properties:
-        projectDetails:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails'
-          description: Details from a specific project.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo:
-      title: JSON object
-      type: object
-      properties:
-        id:
-          type: string
-          description: Project Identifier.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of the project.
-        projectType:
-          type:
-          - string
-          - 'null'
-          description: Code that identifies a project template type
-        status:
-          type:
-          - string
-          - 'null'
-          description: The project's current status.
-        dateTimeCreated:
-          type: string
-          description: Date and time when the project was created.
-          format: date-time
-        dateTimeLastRun:
-          type:
-          - string
-          - 'null'
-          description: Date and time when the project last ran.
-          format: date-time
-        totalNumberInputUnitsSubmitted:
-          type: integer
-          description: Total number of input units submitted for the project.
-          format: int32
-        totalNumberOutputUnitsCompleted:
-          type: integer
-          description: Total number of data units already completed.
-          format: int32
-      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails:
       title: JSON object
       type: object
@@ -547,16 +433,20 @@ components:
             $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError'
           description: List of errors in the data unit uploading asynchronous process.
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult:
+    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
       title: JSON object
       type: object
       properties:
-        targetProjectId:
-          type: string
-          description: New project ID
-          format: uuid
-          readOnly: true
-          example: 00000000-0000-0000-0000-000000000000
+        inputDataUnitProperty:
+          type:
+          - string
+          - 'null'
+          description: Name of property for which error exists.
+        inputDataUnitPropertyValue:
+          type:
+          - string
+          - 'null'
+          description: Original value of the property for which error exists.
       additionalProperties: false
     DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel:
       title: JSON object
@@ -589,6 +479,122 @@ components:
           - 'null'
           additionalProperties: {}
           description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\n\n If left as null, no metatags are assigned.\n \n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n  \n Below is an example on how to use metatags:\n \n     { \n         \"rootString\":  \"This is a string\",\n         \"rootObject\":  {\n \t\t\t\"innerBoolean\": true,\n \t\t\t\"innerNumber\": 1,\n \t\t\t\"innerString\": \"This is another string\",\n\t\t\t\t\"innerNull\": null,\n \t\t\t\"innerObject\": {\n \t\t\t\t},\n \t\t\t\"innerArray\": []\n \t\t},\n         \"rootArray\": [1, 2, 3, 4]\n     }"
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        projects:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo'
+          description: A page with details from several projects.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError:
+      title: JSON object
+      type: object
+      properties:
+        inputDataUnitId:
+          type: string
+          description: Unique identifier of the input data unit where the error occurred.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        errorType:
+          enum:
+          - connectionUnsuccessful
+          - fileDoesNotExist
+          - fileIsNotValid
+          - unauthorizedAccess
+          - statusCodeDoesNotIndicateSuccess
+          - platformError
+          - urlNotSupported
+          type: string
+          description: Type of error.
+          x-enumNames:
+          - ConnectionUnsuccessful
+          - FileDoesNotExist
+          - FileIsNotValid
+          - UnauthorizedAccess
+          - StatusCodeDoesNotIndicateSuccess
+          - PlatformError
+          - UrlNotSupported
+          x-enumDescriptions:
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          - ''
+          x-ms-enum:
+            name: FileUploadErrorMessage
+            modelAsString: true
+        errorDetails:
+          type:
+          - string
+          - 'null'
+          description: Details of error.
+        errorProperty:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty'
+        inputDataUnit:
+          description: Fields of the original uploaded input unit.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult:
+      title: JSON object
+      type: object
+      properties:
+        targetProjectId:
+          type: string
+          description: New project ID
+          format: uuid
+          readOnly: true
+          example: 00000000-0000-0000-0000-000000000000
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo:
+      title: JSON object
+      type: object
+      properties:
+        id:
+          type: string
+          description: Project Identifier.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the project.
+        projectType:
+          type:
+          - string
+          - 'null'
+          description: Code that identifies a project template type
+        status:
+          type:
+          - string
+          - 'null'
+          description: The project's current status.
+        dateTimeCreated:
+          type: string
+          description: Date and time when the project was created.
+          format: date-time
+        dateTimeLastRun:
+          type:
+          - string
+          - 'null'
+          description: Date and time when the project last ran.
+          format: date-time
+        totalNumberInputUnitsSubmitted:
+          type: integer
+          description: Total number of input units submitted for the project.
+          format: int32
+        totalNumberOutputUnitsCompleted:
+          type: integer
+          description: Total number of data units already completed.
+          format: int32
       additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult:
       title: JSON object
@@ -627,21 +633,6 @@ components:
           additionalProperties: {}
           description: "Metatags provide for the ability to assign metadata to projects in the form of key-value pairs. Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria for administrative purposes. Defined.ai does not perform any actions on metatags that customers submit.\n\nThe root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n\nBelow is an example of  a set of metatags:\n\n    { \n        \"rootString\":  \"This is a string\",\n        \"rootObject\":  {\n\t\t\t\"innerBoolean\": true,\n\t\t\t\"innerNumber\": 1,\n\t\t\t\"innerString\": \"This is another string\",\n\t\t\t\"innerNull\": null,\n\t\t\t\"innerObject\": {\n\t\t\t\t},\n\t\t\t\"innerArray\": []\n\t\t},\n        \"rootArray\": [1, 2, 3, 4]\n    }"
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
-      title: JSON object
-      type: object
-      properties:
-        inputDataUnitProperty:
-          type:
-          - string
-          - 'null'
-          description: Name of property for which error exists.
-        inputDataUnitPropertyValue:
-          type:
-          - string
-          - 'null'
-          description: Original value of the property for which error exists.
-      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel:
       title: JSON object
       required:
@@ -668,6 +659,15 @@ components:
           - 'null'
           additionalProperties: {}
           description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\n\n If left as null, no metatags are assigned.\n \n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n  \n Below is an example on how to use metatags:\n \n     { \n         \"rootString\":  \"This is a string\",\n         \"rootObject\":  {\n \t\t\t\"innerBoolean\": true,\n \t\t\t\"innerNumber\": 1,\n \t\t\t\"innerString\": \"This is another string\",\n\t\t\t\t\"innerNull\": null,\n \t\t\t\"innerObject\": {\n \t\t\t\t},\n \t\t\t\"innerArray\": []\n \t\t},\n         \"rootArray\": [1, 2, 3, 4]\n     }"
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        projectDetails:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails'
+          description: Details from a specific project.
       additionalProperties: false
   securitySchemes:
     Bearer:

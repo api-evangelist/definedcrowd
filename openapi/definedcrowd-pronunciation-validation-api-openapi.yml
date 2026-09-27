@@ -219,65 +219,37 @@ paths:
           description: Project not found.
 components:
   schemas:
-    ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel
+    ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel
     : title: JSON object
       required:
-      - pronunciationValidation
+      - languageConfiguration
       type: object
       properties:
-        pronunciationValidation:
+        contributorsDistribution:
           allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel'
-          description: Pronunciation Validation settings.
-      additionalProperties: false
-      description: Json structure with the project configuration.
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel:
-      title: JSON object
-      required:
-      - languageCode
-      type: object
-      properties:
-        languageCode:
-          minLength: 1
-          type: string
-          description: Language code. (e.g. "en-us")
-        requireLanguageTest:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel'
+          description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
+        languageConfiguration:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel'
+          description: Language configuration
+        contributorsPerInputUnit:
+          maximum: 5000
+          minimum: 2
           type:
-          - boolean
+          - integer
           - 'null'
-          description: 'If selected, the project requires the contributors to do a language test
+          description: 'ContributorsPerInputUnit determines how many contributors you would like to process that input unit.
 
-            (if available for the selected language) to guarantee that they are native speakers.'
+            This will allow you to compare executions of the same input'
+          format: int32
+          default: 3
+        showDataDisclaimer:
+          type: boolean
+          description: Displays a disclaimer to specify that inputs are "Not Customer Data" (displayed within task U.I.)
           default: false
       additionalProperties: false
-      description: Language configurations.
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel:
-      title: JSON object
-      type: object
-      properties:
-        ageDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel'
-          description: Age Distribution
-        genderDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel'
-          description: Gender Distribution
-        deviceLocationDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel'
-          description: Device Location Distribution
-      additionalProperties: false
-      description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
+      description: Pronunciation Validation settings
     DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel:
       title: JSON object
       type: object
@@ -309,6 +281,49 @@ components:
           format: int32
       additionalProperties: false
       description: Gender Distribution
+    DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        resultsFileUrl:
+          type:
+          - string
+          - 'null'
+          description: URL to the file containing the results of the project.
+          format: uri
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel:
+      title: JSON object
+      required:
+      - languageCode
+      type: object
+      properties:
+        languageCode:
+          minLength: 1
+          type: string
+          description: Language code. (e.g. "en-us")
+        requireLanguageTest:
+          type:
+          - boolean
+          - 'null'
+          description: 'If selected, the project requires the contributors to do a language test
+
+            (if available for the selected language) to guarantee that they are native speakers.'
+          default: false
+      additionalProperties: false
+      description: Language configurations.
+    ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel
+    : title: JSON object
+      required:
+      - pronunciationValidation
+      type: object
+      properties:
+        pronunciationValidation:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel'
+          description: Pronunciation Validation settings.
+      additionalProperties: false
+      description: Json structure with the project configuration.
     DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel:
       title: JSON object
       type: object
@@ -323,26 +338,6 @@ components:
           description: A ID by which new project will be identified.
           format: uuid
           example: 00000000-0000-0000-0000-000000000000
-      additionalProperties: false
-    ? DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel_1__DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel__DefinedCrowd.PublicApi.Api__Version_1.0.0.0__Culture_neutral__PublicKeyToken_null
-    : title: JSON object
-      required:
-      - inputUnitDetails
-      type: object
-      properties:
-        inputUnitDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel'
-          description: List of input units.
-        autoStartOnUploadSuccess:
-          type:
-          - boolean
-          - 'null'
-          description: 'Your project will automatically start once all data input units
-
-            were successfully uploaded and the project status is UPLOAD SUCCESS'
-          default: false
       additionalProperties: false
     ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel_1__DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationProjectConfigViewModel__DefinedCrowd.PublicApi.Api__Version_1.0.0.0__Culture_neutral__PublicKeyToken_null
     : title: JSON object
@@ -380,76 +375,25 @@ components:
           description: This field is for you to inform DC the desired date for Data to be delivered.
           format: date-time
       additionalProperties: false
-    ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.PronunciationValidation.PronunciationValidationJobSettingsViewModel
+    ? DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel_1__DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel__DefinedCrowd.PublicApi.Api__Version_1.0.0.0__Culture_neutral__PublicKeyToken_null
     : title: JSON object
       required:
-      - languageConfiguration
+      - inputUnitDetails
       type: object
       properties:
-        contributorsDistribution:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel'
-          description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
-        languageConfiguration:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel'
-          description: Language configuration
-        contributorsPerInputUnit:
-          maximum: 5000
-          minimum: 2
+        inputUnitDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel'
+          description: List of input units.
+        autoStartOnUploadSuccess:
           type:
-          - integer
+          - boolean
           - 'null'
-          description: 'ContributorsPerInputUnit determines how many contributors you would like to process that input unit.
+          description: 'Your project will automatically start once all data input units
 
-            This will allow you to compare executions of the same input'
-          format: int32
-          default: 3
-        showDataDisclaimer:
-          type: boolean
-          description: Displays a disclaimer to specify that inputs are "Not Customer Data" (displayed within task U.I.)
+            were successfully uploaded and the project status is UPLOAD SUCCESS'
           default: false
-      additionalProperties: false
-      description: Pronunciation Validation settings
-    DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel:
-      title: JSON object
-      required:
-      - audioFileUrl
-      - sentence
-      type: object
-      properties:
-        sentence:
-          minLength: 1
-          type: string
-          description: Sentence to be presented to the contributors.
-        audioFileUrl:
-          type: string
-          description: URL to the audio file that is going to be listened by the contributors.
-          format: uri
-        id:
-          type:
-          - string
-          - 'null'
-          description: Client generated identifier that will be used as InputUnit Id.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        details:
-          maxLength: 500
-          type:
-          - string
-          - 'null'
-          description: Client generated additional meta-data. An optional string with at most 500 characters.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults:
-      title: JSON object
-      type: object
-      properties:
-        resultsFileUrl:
-          type:
-          - string
-          - 'null'
-          description: URL to the file containing the results of the project.
-          format: uri
       additionalProperties: false
     DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel:
       title: JSON object
@@ -503,6 +447,62 @@ components:
           format: int32
       additionalProperties: false
       description: Age Distribution
+    DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadTextAudioInputUnitViewModel:
+      title: JSON object
+      required:
+      - audioFileUrl
+      - sentence
+      type: object
+      properties:
+        sentence:
+          minLength: 1
+          type: string
+          description: Sentence to be presented to the contributors.
+        audioFileUrl:
+          type: string
+          description: URL to the audio file that is going to be listened by the contributors.
+          format: uri
+        id:
+          type:
+          - string
+          - 'null'
+          description: Client generated identifier that will be used as InputUnit Id.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        details:
+          maxLength: 500
+          type:
+          - string
+          - 'null'
+          description: Client generated additional meta-data. An optional string with at most 500 characters.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        ageDistribution:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel'
+          description: Age Distribution
+        genderDistribution:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel'
+          description: Gender Distribution
+        deviceLocationDistribution:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel'
+          description: Device Location Distribution
+      additionalProperties: false
+      description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
   securitySchemes:
     Bearer:
       type: apiKey

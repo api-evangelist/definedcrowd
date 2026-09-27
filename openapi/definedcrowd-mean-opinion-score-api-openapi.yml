@@ -219,53 +219,6 @@ paths:
           description: Project not found.
 components:
   schemas:
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel:
-      title: JSON object
-      required:
-      - languageCode
-      type: object
-      properties:
-        languageCode:
-          minLength: 1
-          type: string
-          description: Language code. (e.g. "en-us")
-        requireLanguageTest:
-          type:
-          - boolean
-          - 'null'
-          description: 'If selected, the project requires the contributors to do a language test
-
-            (if available for the selected language) to guarantee that they are native speakers.'
-          default: false
-      additionalProperties: false
-      description: Language configurations.
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel:
-      title: JSON object
-      type: object
-      properties:
-        ageDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel'
-          description: Age Distribution
-        genderDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel'
-          description: Gender Distribution
-        deviceLocationDistribution:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel'
-          description: Device Location Distribution
-      additionalProperties: false
-      description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
     DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel:
       title: JSON object
       type: object
@@ -297,21 +250,37 @@ components:
           format: int32
       additionalProperties: false
       description: Gender Distribution
-    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel:
+    DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults:
       title: JSON object
       type: object
       properties:
-        projectName:
+        resultsFileUrl:
           type:
           - string
           - 'null'
-          description: If left as null, a name will be generated from the original plus a timestamp.
-        projectId:
-          type: string
-          description: A ID by which new project will be identified.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
+          description: URL to the file containing the results of the project.
+          format: uri
       additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.LanguageConfigurationViewModel:
+      title: JSON object
+      required:
+      - languageCode
+      type: object
+      properties:
+        languageCode:
+          minLength: 1
+          type: string
+          description: Language code. (e.g. "en-us")
+        requireLanguageTest:
+          type:
+          - boolean
+          - 'null'
+          description: 'If selected, the project requires the contributors to do a language test
+
+            (if available for the selected language) to guarantee that they are native speakers.'
+          default: false
+      additionalProperties: false
+      description: Language configurations.
     ? DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.UploadInputUnitsViewModel_1__DefinedCrowd.PublicApi.Api.Models.Projects.UploadInputUnits.InnerObjects.UploadAudioInputUnitViewModel__DefinedCrowd.PublicApi.Api__Version_1.0.0.0__Culture_neutral__PublicKeyToken_null
     : title: JSON object
       required:
@@ -332,6 +301,33 @@ components:
             were successfully uploaded and the project status is UPLOAD SUCCESS'
           default: false
       additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectViewModel:
+      title: JSON object
+      type: object
+      properties:
+        projectName:
+          type:
+          - string
+          - 'null'
+          description: If left as null, a name will be generated from the original plus a timestamp.
+        projectId:
+          type: string
+          description: A ID by which new project will be identified.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel:
+      title: JSON object
+      required:
+      - meanOpinionScore
+      type: object
+      properties:
+        meanOpinionScore:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel'
+          description: Mean Opinion Score settings.
+      additionalProperties: false
+      description: Json structure with the project configuration.
     DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel:
       title: JSON object
       required:
@@ -387,6 +383,58 @@ components:
           - 'null'
           description: Client generated additional meta-data. An optional string with at most 500 characters.
       additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        target:
+          enum:
+          - Adult
+          - Senior
+          type: string
+          description: 'There are two age categories in the distribution.
+
+            You can select Adult or Senior with age categories 18 – 64 years
+
+            and 65 years and above, respectively.'
+          x-enumNames:
+          - Adult
+          - Senior
+          x-enumDescriptions:
+          - ''
+          - ''
+          x-ms-enum:
+            name: AgeDistributionRange
+            modelAsString: true
+        value:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: "**Custom distribution**\n            \nMeans the value is set to greater than 0% but\nsmaller than or equal to 100%. Should the total value\nbe set to less than 100%, the remaining percentage\nis set with the default distribution.\n            \n**Default distribution**\n            \nMeans that the values are randomized but comply with\nthe job configuration. For example, language settings\nare taken into consideration, as well as country and\nregion settings. Without any contributors’ distribution\nrestriction, whoever is qualified may enter the job.\n            \n**Examples**\n            \nJane Doe sets the age distribution to 75% of the participants being\nin the Adult category. The remaining 25% will be randomly distributed\nbetween the age categories. Therefore, Jane must be aware that some\nof the 25% random distribution may also include the Adult category."
+          format: int32
+      additionalProperties: false
+      description: Age Distribution
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel:
+      title: JSON object
+      type: object
+      properties:
+        target:
+          type:
+          - string
+          - 'null'
+          description: 'Geolocation technology will give an approximate real-world
+
+            geographic location of the device being used and thus the location
+
+            of the contributor using the device.'
+        value:
+          maximum: 100
+          minimum: 1
+          type: integer
+          description: "The value is set to greater than 0% but smaller than or equal to\n100%. Should the total value be set to less than 100%, the remaining\npercentage will have no constraints.\n            \n**Example**\n            \nJane Doe sets the device location distribution to 75% of the\nparticipants being in a particular geographic location. The\nremaining 25% will be randomly distributed. Therefore, Jane Doe\nmust be aware that some of the 25% random distribution may also\ninclude the particular geographic location that was set."
+          format: int32
+      additionalProperties: false
+      description: Device Location Distribution
     ? DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.CreateProjectViewModel_1__DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel__DefinedCrowd.PublicApi.Api__Version_1.0.0.0__Culture_neutral__PublicKeyToken_null
     : title: JSON object
       required:
@@ -423,81 +471,33 @@ components:
           description: This field is for you to inform DC the desired date for Data to be delivered.
           format: date-time
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.GetProjectResultSetQueryResults:
+    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.ContributorsDistributionViewModel:
       title: JSON object
       type: object
       properties:
-        resultsFileUrl:
+        ageDistribution:
           type:
-          - string
+          - array
           - 'null'
-          description: URL to the file containing the results of the project.
-          format: uri
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreProjectConfigViewModel:
-      title: JSON object
-      required:
-      - meanOpinionScore
-      type: object
-      properties:
-        meanOpinionScore:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.MeanOpinionScoreTesting.MeanOpinionScoreJobSettingsViewModel'
-          description: Mean Opinion Score settings.
-      additionalProperties: false
-      description: Json structure with the project configuration.
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel:
-      title: JSON object
-      type: object
-      properties:
-        target:
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel'
+          description: Age Distribution
+        genderDistribution:
           type:
-          - string
+          - array
           - 'null'
-          description: 'Geolocation technology will give an approximate real-world
-
-            geographic location of the device being used and thus the location
-
-            of the contributor using the device.'
-        value:
-          maximum: 100
-          minimum: 1
-          type: integer
-          description: "The value is set to greater than 0% but smaller than or equal to\n100%. Should the total value be set to less than 100%, the remaining\npercentage will have no constraints.\n            \n**Example**\n            \nJane Doe sets the device location distribution to 75% of the\nparticipants being in a particular geographic location. The\nremaining 25% will be randomly distributed. Therefore, Jane Doe\nmust be aware that some of the 25% random distribution may also\ninclude the particular geographic location that was set."
-          format: int32
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.GenderDistributionViewModel'
+          description: Gender Distribution
+        deviceLocationDistribution:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.DeviceLocationDistributionViewModel'
+          description: Device Location Distribution
       additionalProperties: false
-      description: Device Location Distribution
-    DefinedCrowd.PublicApi.Api.Models.Projects.CreateProject.Common.Demographics.AgeDistributionViewModel:
-      title: JSON object
-      type: object
-      properties:
-        target:
-          enum:
-          - Adult
-          - Senior
-          type: string
-          description: 'There are two age categories in the distribution.
-
-            You can select Adult or Senior with age categories 18 – 64 years
-
-            and 65 years and above, respectively.'
-          x-enumNames:
-          - Adult
-          - Senior
-          x-enumDescriptions:
-          - ''
-          - ''
-          x-ms-enum:
-            name: AgeDistributionRange
-            modelAsString: true
-        value:
-          maximum: 100
-          minimum: 1
-          type: integer
-          description: "**Custom distribution**\n            \nMeans the value is set to greater than 0% but\nsmaller than or equal to 100%. Should the total value\nbe set to less than 100%, the remaining percentage\nis set with the default distribution.\n            \n**Default distribution**\n            \nMeans that the values are randomized but comply with\nthe job configuration. For example, language settings\nare taken into consideration, as well as country and\nregion settings. Without any contributors’ distribution\nrestriction, whoever is qualified may enter the job.\n            \n**Examples**\n            \nJane Doe sets the age distribution to 75% of the participants being\nin the Adult category. The remaining 25% will be randomly distributed\nbetween the age categories. Therefore, Jane must be aware that some\nof the 25% random distribution may also include the Adult category."
-          format: int32
-      additionalProperties: false
-      description: Age Distribution
+      description: "Configure the contributors' distribution to meet your requirements.\n            \n**Disclaimer**\n            \nThough every effort is made to meet the contributors’ distribution as\nconfigured, sometimes, due to factors beyond the control of DefinedCrowd,\nwe need to implement a next-best solution and cannot guarantee a 100%\nmatch."
   securitySchemes:
     Bearer:
       type: apiKey
