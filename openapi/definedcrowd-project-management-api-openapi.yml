@@ -369,6 +369,38 @@ paths:
           description: Project does not exist.
 components:
   schemas:
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel:
+      title: JSON object
+      required:
+      - projectName
+      type: object
+      properties:
+        projectName:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: New project name.
+        desiredDeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: "Desired delivery date for new project in UTC format <yyyy-mm-dd>. \nIf left as null, no desired delivery date is assigned."
+          format: date
+        targetProjectId:
+          type:
+          - string
+          - 'null'
+          description: New project ID. If left as null, GUID is auto-generated and returned in the response.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        metatags:
+          title: JSON object
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\n\n If left as null, no metatags are assigned.\n \n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n  \n Below is an example on how to use metatags:\n \n     { \n         \"rootString\":  \"This is a string\",\n         \"rootObject\":  {\n \t\t\t\"innerBoolean\": true,\n \t\t\t\"innerNumber\": 1,\n \t\t\t\"innerString\": \"This is another string\",\n\t\t\t\t\"innerNull\": null,\n \t\t\t\"innerObject\": {\n \t\t\t\t},\n \t\t\t\"innerArray\": []\n \t\t},\n         \"rootArray\": [1, 2, 3, 4]\n     }"
+      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails:
       title: JSON object
       type: object
@@ -433,65 +465,6 @@ components:
             $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError'
           description: List of errors in the data unit uploading asynchronous process.
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
-      title: JSON object
-      type: object
-      properties:
-        inputDataUnitProperty:
-          type:
-          - string
-          - 'null'
-          description: Name of property for which error exists.
-        inputDataUnitPropertyValue:
-          type:
-          - string
-          - 'null'
-          description: Original value of the property for which error exists.
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectConfigurationViewModel:
-      title: JSON object
-      required:
-      - projectName
-      type: object
-      properties:
-        projectName:
-          maxLength: 80
-          minLength: 0
-          type: string
-          description: New project name.
-        desiredDeliveryDate:
-          type:
-          - string
-          - 'null'
-          description: "Desired delivery date for new project in UTC format <yyyy-mm-dd>. \nIf left as null, no desired delivery date is assigned."
-          format: date
-        targetProjectId:
-          type:
-          - string
-          - 'null'
-          description: New project ID. If left as null, GUID is auto-generated and returned in the response.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        metatags:
-          title: JSON object
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\n\n If left as null, no metatags are assigned.\n \n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n  \n Below is an example on how to use metatags:\n \n     { \n         \"rootString\":  \"This is a string\",\n         \"rootObject\":  {\n \t\t\t\"innerBoolean\": true,\n \t\t\t\"innerNumber\": 1,\n \t\t\t\"innerString\": \"This is another string\",\n\t\t\t\t\"innerNull\": null,\n \t\t\t\"innerObject\": {\n \t\t\t\t},\n \t\t\t\"innerArray\": []\n \t\t},\n         \"rootArray\": [1, 2, 3, 4]\n     }"
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults:
-      title: JSON object
-      type: object
-      properties:
-        projects:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo'
-          description: A page with details from several projects.
-      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.UploadInputUnitError:
       title: JSON object
       type: object
@@ -542,16 +515,54 @@ components:
         inputDataUnit:
           description: Fields of the original uploaded input unit.
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult:
+    DefinedCrowd.PublicApi.Api.Results.Project.GetPagedProjectsQueryResults:
       title: JSON object
       type: object
       properties:
-        targetProjectId:
+        projects:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo'
+          description: A page with details from several projects.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult:
+      title: JSON object
+      type: object
+      properties:
+        projectId:
           type: string
-          description: New project ID
+          description: Project ID.
           format: uuid
-          readOnly: true
           example: 00000000-0000-0000-0000-000000000000
+        projectName:
+          type:
+          - string
+          - 'null'
+          description: Name of the project.
+        dateTimeCreated:
+          type: string
+          description: Date and time when the project was created in UTC format.
+          format: date-time
+        desiredDeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Desired delivery date and time for new project in UTC format.
+          format: date-time
+        status:
+          type:
+          - string
+          - 'null'
+          description: The project's current status.
+        metatags:
+          title: JSON object
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: "Metatags provide for the ability to assign metadata to projects in the form of key-value pairs. Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria for administrative purposes. Defined.ai does not perform any actions on metatags that customers submit.\n\nThe root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n\nBelow is an example of  a set of metatags:\n\n    { \n        \"rootString\":  \"This is a string\",\n        \"rootObject\":  {\n\t\t\t\"innerBoolean\": true,\n\t\t\t\"innerNumber\": 1,\n\t\t\t\"innerString\": \"This is another string\",\n\t\t\t\"innerNull\": null,\n\t\t\t\"innerObject\": {\n\t\t\t\t},\n\t\t\t\"innerArray\": []\n\t\t},\n        \"rootArray\": [1, 2, 3, 4]\n    }"
       additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Project.ProjectInfo:
       title: JSON object
@@ -596,42 +607,29 @@ components:
           description: Total number of data units already completed.
           format: int32
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectDetailsResult:
+    DefinedCrowd.PublicApi.Api.Results.Project.ErrorProperty:
       title: JSON object
       type: object
       properties:
-        projectId:
-          type: string
-          description: Project ID.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        projectName:
+        inputDataUnitProperty:
           type:
           - string
           - 'null'
-          description: Name of the project.
-        dateTimeCreated:
-          type: string
-          description: Date and time when the project was created in UTC format.
-          format: date-time
-        desiredDeliveryDate:
+          description: Name of property for which error exists.
+        inputDataUnitPropertyValue:
           type:
           - string
           - 'null'
-          description: Desired delivery date and time for new project in UTC format.
-          format: date-time
-        status:
-          type:
-          - string
-          - 'null'
-          description: The project's current status.
-        metatags:
-          title: JSON object
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: "Metatags provide for the ability to assign metadata to projects in the form of key-value pairs. Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria for administrative purposes. Defined.ai does not perform any actions on metatags that customers submit.\n\nThe root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n\nBelow is an example of  a set of metatags:\n\n    { \n        \"rootString\":  \"This is a string\",\n        \"rootObject\":  {\n\t\t\t\"innerBoolean\": true,\n\t\t\t\"innerNumber\": 1,\n\t\t\t\"innerString\": \"This is another string\",\n\t\t\t\"innerNull\": null,\n\t\t\t\"innerObject\": {\n\t\t\t\t},\n\t\t\t\"innerArray\": []\n\t\t},\n        \"rootArray\": [1, 2, 3, 4]\n    }"
+          description: Original value of the property for which error exists.
+      additionalProperties: false
+    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults:
+      title: JSON object
+      type: object
+      properties:
+        projectDetails:
+          allOf:
+          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails'
+          description: Details from a specific project.
       additionalProperties: false
     DefinedCrowd.PublicApi.Api.Models.Projects.UpdateProject.UpdateProjectViewModel:
       title: JSON object
@@ -660,14 +658,16 @@ components:
           additionalProperties: {}
           description: " Metatags provide for the ability to assign metadata to projects in the form of key-value pairs.\n Although there are no inherent types of metatags, they enable customers to categorize a project by purpose, owner, environment, or other criteria.\n Defined.ai does not perform any actions on metatags that customers submit. DO NOT SUBMIT PERSONALLY IDENTIFIABLE INFORMATION (PII) in a Metatag.\n\n If left as null, no metatags are assigned.\n \n When set, the root-level properties support string, object, and array data types (data types do not belong to these three will be converted to string type), while properties at inner level support all valid JSON data types.\n  \n Below is an example on how to use metatags:\n \n     { \n         \"rootString\":  \"This is a string\",\n         \"rootObject\":  {\n \t\t\t\"innerBoolean\": true,\n \t\t\t\"innerNumber\": 1,\n \t\t\t\"innerString\": \"This is another string\",\n\t\t\t\t\"innerNull\": null,\n \t\t\t\"innerObject\": {\n \t\t\t\t},\n \t\t\t\"innerArray\": []\n \t\t},\n         \"rootArray\": [1, 2, 3, 4]\n     }"
       additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Project.GetProjectStatusQueryResults:
+    DefinedCrowd.PublicApi.Api.Models.Projects.CloneProject.CloneProjectResult:
       title: JSON object
       type: object
       properties:
-        projectDetails:
-          allOf:
-          - $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Project.ProjectDetails'
-          description: Details from a specific project.
+        targetProjectId:
+          type: string
+          description: New project ID
+          format: uuid
+          readOnly: true
+          example: 00000000-0000-0000-0000-000000000000
       additionalProperties: false
   securitySchemes:
     Bearer:

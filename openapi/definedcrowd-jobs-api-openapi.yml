@@ -114,6 +114,25 @@ paths:
           description: Project or job does not exist.
 components:
   schemas:
+    DefinedCrowd.PublicApi.Api.Results.Jobs.Job:
+      title: JSON object
+      type: object
+      properties:
+        id:
+          type: string
+          description: Job identifier.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        contributorsPerInputUnit:
+          type: integer
+          description: Number of contributors needed to complete one input unit.
+          format: int32
+        languageCode:
+          type:
+          - string
+          - 'null'
+          description: Language code configured. (e.g. "en-us")
+      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Models.Jobs.UpdateProjectJobViewModel:
       title: JSON object
       required:
@@ -138,25 +157,6 @@ components:
           items:
             $ref: '#/components/schemas/DefinedCrowd.PublicApi.Api.Results.Jobs.Job'
           description: List of jobs within a specific project
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Jobs.Job:
-      title: JSON object
-      type: object
-      properties:
-        id:
-          type: string
-          description: Job identifier.
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        contributorsPerInputUnit:
-          type: integer
-          description: Number of contributors needed to complete one input unit.
-          format: int32
-        languageCode:
-          type:
-          - string
-          - 'null'
-          description: Language code configured. (e.g. "en-us")
       additionalProperties: false
   securitySchemes:
     Bearer:
