@@ -1,0 +1,12 @@
+{
+ "url": "https://api.production-na01.definedcrowd.com/swagger/docs/external",
+ "requested_url": "https://api.production-na01.definedcrowd.com/swagger/docs/external",
+ "status": 200,
+ "content_type": "application/json;charset=utf-8",
+ "bytes": 154117,
+ "sha256": "14cab8ac3bca3a7f389a9301c89e5ee9459fadf2313be7482318cb5ad512e2c9",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
