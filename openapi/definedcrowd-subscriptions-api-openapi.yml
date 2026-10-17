@@ -160,6 +160,44 @@ paths:
           description: Project does not exist / Subscription type is not configured.
 components:
   schemas:
+    DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult:
+      title: JSON object
+      type: object
+      properties:
+        type:
+          enum:
+          - DeliverablePublished
+          - DataUploadCompleted
+          type: string
+          description: Type of notifications.
+          x-enumNames:
+          - DeliverablePublished
+          - DataUploadCompleted
+          x-enumDescriptions:
+          - ''
+          - ''
+          x-ms-enum:
+            name: NotificationType
+            modelAsString: true
+        to:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: List of main recipients of the email addresses [1-10]
+        emailListConsent:
+          type: boolean
+          description: 'When this flag is True the user acknowledges that it has obtained all necessary valid consents
+
+            from the relevant data subjects (email owners) to subscribe, on their behalf, each respective email address
+
+            to this notification service, in compliance with the applicable data protection laws, and in agreement with
+
+            Defined.ai''s service <a href="https://www.defined.ai/terms-of-use">Terms of Use</a>
+
+            and <a href="https://www.defined.ai/privacy-policy">Privacy Policy</a>.'
+      additionalProperties: false
     DefinedCrowd.PublicApi.Api.Results.Subscriptions.GetSubscriptionsResults:
       title: JSON object
       type: object
@@ -200,44 +238,6 @@ components:
             the relevant data subjects (email owners) to subscribe, on their behalf, each respective email address to
 
             this notification service, in compliance with the applicable data protection laws, and in agreement with
-
-            Defined.ai''s service <a href="https://www.defined.ai/terms-of-use">Terms of Use</a>
-
-            and <a href="https://www.defined.ai/privacy-policy">Privacy Policy</a>.'
-      additionalProperties: false
-    DefinedCrowd.PublicApi.Api.Results.Subscriptions.Dtos.SubscriptionResult:
-      title: JSON object
-      type: object
-      properties:
-        type:
-          enum:
-          - DeliverablePublished
-          - DataUploadCompleted
-          type: string
-          description: Type of notifications.
-          x-enumNames:
-          - DeliverablePublished
-          - DataUploadCompleted
-          x-enumDescriptions:
-          - ''
-          - ''
-          x-ms-enum:
-            name: NotificationType
-            modelAsString: true
-        to:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: List of main recipients of the email addresses [1-10]
-        emailListConsent:
-          type: boolean
-          description: 'When this flag is True the user acknowledges that it has obtained all necessary valid consents
-
-            from the relevant data subjects (email owners) to subscribe, on their behalf, each respective email address
-
-            to this notification service, in compliance with the applicable data protection laws, and in agreement with
 
             Defined.ai''s service <a href="https://www.defined.ai/terms-of-use">Terms of Use</a>
 
