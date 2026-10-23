@@ -179,3 +179,9 @@ x-tagGroups:
   tags:
   - Mean Opinion Score
   - Pronunciation Validation
+x-provenance:
+  method: harvested
+  publisher: Defined.ai (DefinedCrowd)
+  source: https://api.production-na01.definedcrowd.com/swagger/docs/external
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
